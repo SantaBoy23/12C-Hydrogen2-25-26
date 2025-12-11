@@ -47,6 +47,9 @@
 #include "autons.hpp"
 #include "drivetrain.hpp"
 #include "intake.hpp"
+#include "matchLoad.hpp"
+#include "antenna.hpp"
+#include "park.hpp"
 
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do

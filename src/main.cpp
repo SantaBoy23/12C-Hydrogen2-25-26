@@ -1,8 +1,8 @@
 #include "main.h"
 
 ez::Drive chassis(
-    {-11, -12, -13},    // Left Chassis Ports
-    {18, 19, 20}, // Right Chassis Ports
+    {-18, -19, -20},    // Left Chassis Ports
+    {11, 12, 13}, // Right Chassis Ports
     17, 3.25, 450  // IMU Port, Wheel Diameter (in), Wheel RPM
 );
 
@@ -11,16 +11,16 @@ ez::Drive chassis(
 //  - you should get positive values on the encoders going FORWARD and RIGHT
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
-// ez::tracking_wheel horiz_tracker(8, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels
-// ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
+ez::tracking_wheel horiz_tracker(8, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels
+ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
 
 void initialize() {
   ez::ez_template_print();  // Print EZ-Template branding
 
   pros::delay(500);  // Allow legacy ports to initialize
   
-  //chassis.odom_tracker_front_set(&horiz_tracker);
-  //chassis.odom_tracker_right_set(&vert_tracker);
+  chassis.odom_tracker_front_set(&horiz_tracker);
+  chassis.odom_tracker_right_set(&vert_tracker);
 
   chassis.opcontrol_curve_buttons_toggle(true);   // Enables modifying the controller curve with buttons on the joysticks
   chassis.opcontrol_drive_activebrake_set(0.0);   // Sets the active brake kP. We recommend ~2.  0 will disable.
@@ -30,6 +30,15 @@ void initialize() {
 
   // Autonomous Selector
   ez::as::auton_selector.autons_add({
+
+
+      {"Middle Goal Antenna Auto for LEFT Side (4 + 3 + antenna)", elims_left_auto},
+      {"Antenna push auto for RIGHT side (7 + antenna)", right_antenna_auto},
+      {"Antenna push auto for LEFT side (7 + antenna)", left_antenna_auto},
+      {"Sig SOLO AWP (4 + 3 + 4)", sig_solo_awp},
+      {"Skills Auto", skills_auto},
+
+
       {"Drive\n\nDrive forward and come back", drive_example},
       {"Turn\n\nTurn 3 times.", turn_example},
       {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
@@ -154,6 +163,10 @@ void opcontrol() {
 
     chassis.opcontrol_tank();  // Tank control
     IntakeControl();
+    OdomPodControl();
+    AntennaControl();
+    MatchLoadControl();
+
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }

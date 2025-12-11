@@ -2,6 +2,16 @@
 
 void default_constants();
 
+inline ez::Piston odomPod('E');
+void OdomPodLift(bool OdomPodState);
+void OdomPodControl();
+
+void sig_solo_awp ();
+void elims_left_auto();
+void right_antenna_auto();
+void left_antenna_auto();
+void skills_auto();
+
 void drive_example();
 void turn_example();
 void drive_and_turn();
