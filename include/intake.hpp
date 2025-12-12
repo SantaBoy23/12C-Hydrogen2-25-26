@@ -3,15 +3,17 @@
 #include "EZ-Template/api.hpp"
 #include "api.h"
 
-inline pros::Motor intakeBottom(-10);
-inline pros::Motor intakeTop(-1);
+// Declare motors, but do NOT construct them here.
+extern pros::Motor intakeBottom;
+extern pros::Motor intakeTop;
 
-inline ez::Piston hood('B');
+inline ez::Piston center('B');
 
 void IntakeLiftDrop(bool IntakeLiftState);
-void HoodLift(bool HoodState);
+void CenterLift(bool CenterState);
 
-void BottomIntakeMove();
-void TopIntakeMove();
+void BottomIntakeMove(int speed);
+void TopIntakeMove(int speed);
+void FullIntakeMove(int speed);
 void IntakeControl();
-void FullIntakeMove();
+void CenterControl();

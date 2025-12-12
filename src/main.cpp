@@ -132,9 +132,9 @@ void ez_template_extras() {
     // When enabled:
     //  * use A and Y to increment / decrement the constants
     //  * use the arrow keys to navigate the constants
-    if (master.get_digital_new_press(DIGITAL_X))
-      chassis.pid_tuner_toggle();
-      chassis.pid_tuner_full_enable(true);
+    // if (master.get_digital_new_press(DIGITAL_X))
+    //   chassis.pid_tuner_toggle();
+    //   chassis.pid_tuner_full_enable(true);
 
     // Trigger the selected autonomous routine using B and DOWN
     if (master.get_digital(DIGITAL_B) && master.get_digital(DIGITAL_DOWN)) {
@@ -156,6 +156,9 @@ void ez_template_extras() {
 
 // Driver Control
 void opcontrol() {
+
+  pros::delay(200);  // Allow ports to initialize
+
   chassis.drive_brake_set(MOTOR_BRAKE_COAST); // Switch motor brakes to coast
 
   while (true) {
@@ -166,6 +169,7 @@ void opcontrol() {
     OdomPodControl();
     AntennaControl();
     MatchLoadControl();
+    CenterControl();
 
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
