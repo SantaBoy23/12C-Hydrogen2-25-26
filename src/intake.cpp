@@ -19,7 +19,7 @@ void CenterLift(bool CenterState) {
     center.set(CenterState);
 }
 
-void HoodControl() {
+void CenterControl() {
 
 }
 

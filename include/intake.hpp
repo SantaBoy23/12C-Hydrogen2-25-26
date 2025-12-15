@@ -4,8 +4,8 @@
 #include "api.h"
 
 // Declare motors, but do NOT construct them here.
-extern pros::Motor intakeBottom;
-extern pros::Motor intakeTop;
+inline pros::Motor intakeBottom(10);
+inline pros::Motor intakeTop(-1);
 
 inline ez::Piston center('B');
 
