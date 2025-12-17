@@ -3,7 +3,7 @@
 ez::Drive chassis(
     {-18, -19, -20},    // Left Chassis Ports
     {11, 12, 13}, // Right Chassis Ports
-    17, 3.25, 450  // IMU Port, Wheel Diameter (in), Wheel RPM
+    2, 3.25, 450  // IMU Port, Wheel Diameter (in), Wheel RPM
 );
 
 // Uncomment the trackers you're using here!
@@ -11,16 +11,22 @@ ez::Drive chassis(
 //  - you should get positive values on the encoders going FORWARD and RIGHT
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
-ez::tracking_wheel horiz_tracker(8, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels
-ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
+ez::tracking_wheel horiz_tracker(9, 2, -0.73);  // This tracking wheel is perpendicular to the drive wheels
+// ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
 
 void initialize() {
   ez::ez_template_print();  // Print EZ-Template branding
 
   pros::delay(500);  // Allow legacy ports to initialize
+
+  // Configure intake motors
+  intakeTop.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  intakeBottom.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  intakeTop.set_current_limit(2500);
+  intakeBottom.set_current_limit(2500);
   
-  chassis.odom_tracker_front_set(&horiz_tracker);
-  chassis.odom_tracker_right_set(&vert_tracker);
+  chassis.odom_tracker_back_set(&horiz_tracker);
+  // chassis.odom_tracker_right_set(&vert_tracker);
 
   chassis.opcontrol_curve_buttons_toggle(true);   // Enables modifying the controller curve with buttons on the joysticks
   chassis.opcontrol_drive_activebrake_set(0.0);   // Sets the active brake kP. We recommend ~2.  0 will disable.
@@ -30,7 +36,7 @@ void initialize() {
 
   // Autonomous Selector
   ez::as::auton_selector.autons_add({
-
+      {"Sig SOLO AWP (4 + 3 + 4)", sig_solo_awp},
 
       {"Middle Goal Antenna Auto for LEFT Side (4 + 3 + antenna)", elims_left_auto},
       {"Antenna push auto for RIGHT side (7 + antenna)", right_antenna_auto},
@@ -132,9 +138,10 @@ void ez_template_extras() {
     // When enabled:
     //  * use A and Y to increment / decrement the constants
     //  * use the arrow keys to navigate the constants
-    // if (master.get_digital_new_press(DIGITAL_X))
-    //   chassis.pid_tuner_toggle();
-    //   chassis.pid_tuner_full_enable(true);
+    if (master.get_digital_new_press(DIGITAL_X)){
+      chassis.pid_tuner_toggle();
+      chassis.pid_tuner_full_enable(true);
+    }
 
     // Trigger the selected autonomous routine using B and DOWN
     if (master.get_digital(DIGITAL_B) && master.get_digital(DIGITAL_DOWN)) {
@@ -157,7 +164,7 @@ void ez_template_extras() {
 // Driver Control
 void opcontrol() {
 
-  pros::delay(200);  // Allow ports to initialize
+  pros::delay(500);  // Allow ports to initialize
 
   chassis.drive_brake_set(MOTOR_BRAKE_COAST); // Switch motor brakes to coast
 

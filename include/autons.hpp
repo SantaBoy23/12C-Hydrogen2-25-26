@@ -12,6 +12,7 @@ void right_antenna_auto();
 void left_antenna_auto();
 void skills_auto();
 
+void random_testing();
 void drive_example();
 void turn_example();
 void drive_and_turn();

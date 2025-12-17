@@ -10,12 +10,12 @@ void TopIntakeMove(int IntakeSpeed) {
     intakeTop.move(IntakeSpeed);
 }
 
-void FullIntakeMove(int IntakeSpeed) {
-    intakeTop.move(IntakeSpeed);
-    intakeBottom.move(-IntakeSpeed);
-}
+// void FullIntakeMove(int IntakeSpeed) {
+//     intakeTop.move(IntakeSpeed);
+//     intakeBottom.move(-IntakeSpeed);
+// }
 
-void CenterLift(bool CenterState) {
+void CenterDrop(bool CenterState) {
     center.set(CenterState);
 }
 
@@ -48,15 +48,15 @@ void IntakeControl() {
 
     else if (master.get_digital(DIGITAL_RIGHT)) {
         BottomIntakeMove(127);
-        TopIntakeMove(-127);
-        CenterLift(true);
+        TopIntakeMove(-110);
+        CenterDrop(true);
     }
 
     // If no button is pressed, stop intake from spinning
     else {
         BottomIntakeMove(0);
         TopIntakeMove(0);
-        CenterLift(false);
+        CenterDrop(false);
     }
 }
 

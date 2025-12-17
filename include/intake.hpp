@@ -10,7 +10,7 @@ inline pros::Motor intakeTop(-1);
 inline ez::Piston center('B');
 
 void IntakeLiftDrop(bool IntakeLiftState);
-void CenterLift(bool CenterState);
+void CenterDrop(bool CenterState);
 
 void BottomIntakeMove(int speed);
 void TopIntakeMove(int speed);
