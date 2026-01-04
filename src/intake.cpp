@@ -52,6 +52,12 @@ void IntakeControl() {
         CenterDrop(true);
     }
 
+    else if (master.get_digital(DIGITAL_DOWN)) {
+        BottomIntakeMove(127);
+        TopIntakeMove(-80);
+        CenterDrop(true);
+    }
+
     // If no button is pressed, stop intake from spinning
     else {
         BottomIntakeMove(0);

@@ -50,6 +50,7 @@
 #include "matchLoad.hpp"
 #include "antenna.hpp"
 #include "park.hpp"
+#include "centerDescore.hpp"
 
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do

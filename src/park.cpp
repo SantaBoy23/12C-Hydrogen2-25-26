@@ -7,5 +7,5 @@ void ParkDrop(bool ParkState) {
 
 void ParkControl() {
     //If DOWN Arrow is pressed, toggle Park state
-    park.button_toggle(master.get_digital(DIGITAL_DOWN));
+    // park.button_toggle(master.get_digital(DIGITAL_DOWN));
 }

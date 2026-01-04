@@ -11,7 +11,7 @@ ez::Drive chassis(
 //  - you should get positive values on the encoders going FORWARD and RIGHT
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
-ez::tracking_wheel horiz_tracker(9, 2, -0.84);  // This tracking wheel is perpendicular to the drive wheels //was-0.73
+ez::tracking_wheel horiz_tracker(9, 2, -0.5);  // This tracking wheel is perpendicular to the drive wheels //was-0.73
 // ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
 
 void initialize() {
@@ -36,7 +36,7 @@ void initialize() {
 
   // Autonomous Selector
   ez::as::auton_selector.autons_add({
-      {"Sig SOLO AWP (4 + 3 + 4)", sig_solo_awp},
+      {"Skills Auto", skills_auto},
 
       {"Middle Goal Antenna Auto for LEFT Side (4 + 3 + antenna)", elims_left_auto},
       {"Antenna push auto for RIGHT side (7 + antenna)", right_antenna_auto},
@@ -164,6 +164,10 @@ void ez_template_extras() {
 // Driver Control
 void opcontrol() {
 
+  AntennaRaise(true);
+  OdomPodLift(true);
+
+
   pros::delay(500);  // Allow ports to initialize
 
   chassis.drive_brake_set(MOTOR_BRAKE_COAST); // Switch motor brakes to coast
@@ -178,7 +182,7 @@ void opcontrol() {
     MatchLoadControl();
     CenterControl();
     ParkControl();
-
+    CenterDescoreControl();
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }
