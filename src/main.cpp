@@ -36,12 +36,12 @@ void initialize() {
 
   // Autonomous Selector
   ez::as::auton_selector.autons_add({
-      {"Skills Auto", skills_auto},
+      {"Middle Goal Antenna Auto for LEFT Side (4 + 3 + antenna)", elims_left_auto},
 
+      {"Sig SOLO AWP (4 + 3 + 4)", sig_solo_awp},
       {"Middle Goal Antenna Auto for LEFT Side (4 + 3 + antenna)", elims_left_auto},
       {"Antenna push auto for RIGHT side (7 + antenna)", right_antenna_auto},
       {"Antenna push auto for LEFT side (7 + antenna)", left_antenna_auto},
-      {"Sig SOLO AWP (4 + 3 + 4)", sig_solo_awp},
       {"Skills Auto", skills_auto},
 
 
