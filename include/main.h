@@ -51,6 +51,7 @@
 #include "antenna.hpp"
 #include "park.hpp"
 #include "centerDescore.hpp"
+#include "wallDrive.hpp"
 
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do

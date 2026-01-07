@@ -3,6 +3,7 @@
 void default_constants();
 
 inline ez::Piston odomPod('E');
+
 void OdomPodLift(bool OdomPodState);
 void OdomPodControl();
 

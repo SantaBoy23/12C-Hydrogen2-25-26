@@ -1,4 +1,6 @@
 #include "main.h"
+#include "autons.hpp"
+#include "wallDrive.hpp"
 
 /////
 // For installation, upgrading, documentations, and tutorials, check out our website!
@@ -60,19 +62,13 @@ void default_constants() {
   chassis.pid_angle_behavior_set(ez::shortest);  // Changes the default behavior for turning, this defaults it to the shortest path there
 }
 
-void random_testing (){
-  // chassis.pid_odom_injected_pp_set({{{0_in, 24_in}, fwd, 110},
-  //                                   {{24_in, 24_in}, fwd, 110}}, 
-  //                                   true);
-  // chassis.pid_wait();
-  
-  chassis.pid_odom_smooth_pp_set({{{0_in, 24_in}, fwd, 110},
-                                  {{24_in, 24_in}, fwd, 110}},
-                                  true);
-  chassis.pid_wait();
 
-  // chassis.pid_turn_set({12_in, 12_in}, fwd, 110, true);
-  // chassis.pid_wait();
+void random_testing (){
+  // wall drive
+  wall_drive_to_point(135, 110.0, 127);
+
+  //turn
+  turn_to_angle(95, 127);
 }
 
 void elims_left_auto() {
@@ -457,8 +453,10 @@ void skills_auto() {
   chassis.pid_wait();
 
   //move to other side of field
-  chassis.pid_odom_set({{135_in, 110_in}, fwd, 127}, true);
-  chassis.pid_wait();
+  // chassis.pid_odom_set({{135_in, 110_in}, fwd, 127}, true);
+  // chassis.pid_wait();
+  wall_drive_to_point(135, 110.0, 127);
+
 
   //turn away from wall
   chassis.pid_turn_set(270_deg, TURN_SPEED);
