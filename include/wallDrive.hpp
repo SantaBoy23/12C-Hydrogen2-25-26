@@ -28,6 +28,7 @@ void correct_odom_with_sensors();
 void wall_drive_x(float x_target, int speed = 80);
 void wall_drive_y(float y_target, int speed = 80);
 void wall_drive_to_point(float x_target, float y_target, int speed = 80);
+void wall_drive_to_point_direct(float x_target, float y_target, int speed = 80);
 
 // ------------------------------
 // Angle correction

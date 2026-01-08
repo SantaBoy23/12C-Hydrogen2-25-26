@@ -163,3 +163,30 @@ void turn_to_angle(double target_angle, int speed = 90, double tol = 1.0) {
         pros::delay(10);
     }
 }
+
+
+void wall_drive_to_point_direct(float x_target, float y_target, int speed = 80) {
+    double x = chassis.odom_x_get();
+    double y = chassis.odom_y_get();
+
+    double dx = x_target - x;
+    double dy = y_target - y;
+
+    // Distance to target
+    double dist = sqrt(dx * dx + dy * dy);
+    if (dist < 0.5) return;
+
+    // Heading toward target
+    double heading = atan2(dy, dx) * 180.0 / M_PI;
+
+    // Turn to face target
+    chassis.pid_turn_set(heading, speed);
+    chassis.pid_wait();
+
+    // Drive straight to target
+    chassis.pid_odom_set(dist, speed);
+    chassis.pid_wait();
+
+    // Snap odometry back to walls once stopped
+    correct_odom_with_sensors();
+}

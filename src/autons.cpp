@@ -64,11 +64,21 @@ void default_constants() {
 
 
 void random_testing (){
-  // wall drive
-  wall_drive_to_point(135, 110.0, 127);
+  chassis.odom_xyt_set(0_in, 0_in, 0_deg);
+  wall_drive_x(100, 127);
 
-  //turn
-  turn_to_angle(95, 127);
+  // //Set starting angle
+  // chassis.odom_xyt_set(0_in, 0_in, 0_deg);
+  // // wall drive
+  // wall_drive_to_point(0, 110.0, 127);
+
+  // //Set starting angle
+  // chassis.odom_xyt_set(0_in, 0_in, 90_deg);
+  // // wall drive
+  // wall_drive_to_point(110, 0, 127);
+
+  // //turn
+  // turn_to_angle(95, 110);
 }
 
 void elims_left_auto() {
