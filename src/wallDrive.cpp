@@ -1,45 +1,54 @@
 #include "main.h"
 #include "wallDrive.hpp"
-#include "autons.hpp"   // distance sensors
-#include "drivetrain.hpp"    // chassis
+#include "autons.hpp"
+#include "drivetrain.hpp"
 
 
-// Sensor offsets from robot center (in inches)
-constexpr float RIGHT_SENSOR_OFFSET = -1.5;
-constexpr float LEFT_SENSOR_OFFSET  = -1.5;
-constexpr float FRONT_SENSOR_OFFSET = 0;
+// Distance sensor definitions
+pros::Distance leftDist(9);
+pros::Distance rightDist(4);
+pros::Distance frontDist(8);
+pros::Distance rightDistAlt(3);
+// pros::Distance backDist(0);
+
+
+// Sensor offsets
+constexpr float RIGHT_SENSOR_OFFSET = 1.25;
+constexpr float RIGHT_SENSOR_ALT_OFFSET = 5.5;
+constexpr float LEFT_SENSOR_OFFSET  = 5.25;
+constexpr float FRONT_SENSOR_OFFSET = 2.75;
 // constexpr float BACK_SENSOR_OFFSET  = 6.5;
 
-// Field wall positions (in inches)
-constexpr float WALL_X_LEFT   = 0.0;
-constexpr float WALL_X_RIGHT  = 140.0; // adjust to your field width
-constexpr float WALL_Y_BACK   = 0.0;
-constexpr float WALL_Y_FRONT  = 140.0; // adjust to your field length
+// Distance between front right and back right sensors
+constexpr float RIGHT_SENSOR_SPACING = 5.35;
 
-static double normalize_angle(double a) {
+
+// Field wall positions
+constexpr float WALL_X_LEFT   = 0.0;
+constexpr float WALL_X_RIGHT  = 140.0;
+constexpr float WALL_Y_BACK   = 0.0;
+constexpr float WALL_Y_FRONT  = 140.0;
+
+double normalize_angle(double a) {
     while (a > 180) a -= 360;
     while (a < -180) a += 360;
     return a;
 }
 
-static bool near_angle(double theta, double target, double tol) {
+bool near_angle(double theta, double target, double tol) {
     return fabs(normalize_angle(theta - target)) < tol;
 }
 
-// Convert V5 Distance sensor reading (mm) to inches
-inline float distance_in(pros::Distance &sensor) {
-    return sensor.get() / 25.4f; // mm → in
+// Convert distance sensor input to inches
+float distance_in(pros::Distance &sensor) {
+    return sensor.get() / 25.4f;
 }
 
 
-
-
-// ------------------------------
-// Distance sensor confidence weighting
-// ------------------------------
-static float sensor_confidence(float d) {
-    constexpr float MIN_D = 2.0f;     // invalid below
-    constexpr float MAX_D = 40.0f;    // invalid above
+//Distance sensor confidence weighting
+float sensor_confidence(float d) {
+    constexpr float MIN_D = 2.0f;      // invalid below
+    constexpr float MAX_D = 40.0f;     // invalid above
     constexpr float FULL_CONF = 12.0f; // full confidence when close
 
     if (d < MIN_D || d > MAX_D) return 0.0f;
@@ -48,22 +57,21 @@ static float sensor_confidence(float d) {
     return (MAX_D - d) / (MAX_D - FULL_CONF);
 }
 
-// ------------------------------
-// Confidence-weighted odometry correction (X + Y)
-// ------------------------------
+
+//Confidence weighted odom correction
 void correct_odom_with_sensors() {
 
-    // Read sensors (inches)
+    //Read sensors
     float d_right = distance_in(rightDist);
     float d_left  = distance_in(leftDist);
     float d_front = distance_in(frontDist);
 
-    // Current odometry
+    //current odom values
     double x = chassis.odom_x_get();
     double y = chassis.odom_y_get();
     double theta = chassis.odom_theta_get();
 
-    // ---------------- X correction ----------------
+    //Xcorrection
     float conf_r = sensor_confidence(d_right);
     float conf_l = sensor_confidence(d_left);
 
@@ -76,7 +84,7 @@ void correct_odom_with_sensors() {
         x += conf_l * (x_meas - x);
     }
 
-    // ---------------- Y correction ----------------
+    //Y correction
     float conf_f = sensor_confidence(d_front);
 
     if (conf_f > 0.0f) {
@@ -84,51 +92,47 @@ void correct_odom_with_sensors() {
         y += conf_f * (y_meas - y);
     }
 
-    // Apply blended odometry update
+    // Apply blended odom update
     chassis.odom_xyt_set(x, y, theta);
 }
 
 
-void wall_drive_x(float x_target, int speed = 80) {
+//move along the wall on the x axis
+void wall_drive_x(float x_target, int speed) {
     double current_x = chassis.odom_x_get();
-
-    // compute relative distance to target
     double distance_to_drive = x_target - current_x;
 
     while (fabs(distance_to_drive) > 0.5) {
-        correct_odom_with_sensors(); // correct odom using sensors
+        correct_odom_with_sensors();
 
-        // recompute distance after correction
         current_x = chassis.odom_x_get();
         distance_to_drive = x_target - current_x;
 
-        // drive the remaining distance
         chassis.pid_odom_set(distance_to_drive, speed);
         chassis.pid_wait();
     }
 }
 
-void wall_drive_y(float y_target, int speed = 80) {
+
+//move along the wall on the y axis
+void wall_drive_y(float y_target, int speed) {
     double current_y = chassis.odom_y_get();
     double distance_to_drive = y_target - current_y;
 
     while (fabs(distance_to_drive) > 0.5) {
-        correct_odom_with_sensors(); // correct odom using sensors
+        correct_odom_with_sensors();
 
-        // recompute distance after correction
         current_y = chassis.odom_y_get();
         distance_to_drive = y_target - current_y;
 
-        // drive the remaining distance
         chassis.pid_odom_set(distance_to_drive, speed);
         chassis.pid_wait();
     }
 }
 
-
 void wall_drive_to_point(float x_target, float y_target, int speed) {
 
-    // --- Move in X ---
+    //Move along x axis
     double current_x = chassis.odom_x_get();
     double dx = x_target - current_x;
 
@@ -140,7 +144,7 @@ void wall_drive_to_point(float x_target, float y_target, int speed) {
         wall_drive_x(x_target, speed);
     }
 
-    // --- Move in Y ---
+    //move along y axis
     double current_y = chassis.odom_y_get();
     double dy = y_target - current_y;
 
@@ -153,40 +157,59 @@ void wall_drive_to_point(float x_target, float y_target, int speed) {
     }
 }
 
-void turn_to_angle(double target_angle, int speed = 90, double tol = 1.0) {
-    // Start PID turn
+
+//turn to an angle using distance sensor input
+void turn_to_angle(double target_angle, int speed, double tol) {
     chassis.pid_turn_set(target_angle, speed);
 
-    // Continue correcting odometry while turning
     while (fabs(normalize_angle(chassis.odom_theta_get() - target_angle)) > tol) {
-        correct_odom_with_sensors(); // continuous correction
+        correct_odom_with_sensors();
         pros::delay(10);
     }
 }
 
 
-void wall_drive_to_point_direct(float x_target, float y_target, int speed = 80) {
+//move directly to a point using distance sensors 
+void wall_drive_to_point_direct(float x_target, float y_target, int speed) {
     double x = chassis.odom_x_get();
     double y = chassis.odom_y_get();
 
     double dx = x_target - x;
     double dy = y_target - y;
 
-    // Distance to target
     double dist = sqrt(dx * dx + dy * dy);
     if (dist < 0.5) return;
 
-    // Heading toward target
     double heading = atan2(dy, dx) * 180.0 / M_PI;
 
-    // Turn to face target
     chassis.pid_turn_set(heading, speed);
     chassis.pid_wait();
 
-    // Drive straight to target
     chassis.pid_odom_set(dist, speed);
     chassis.pid_wait();
 
-    // Snap odometry back to walls once stopped
     correct_odom_with_sensors();
+}
+
+
+//function to find y coordinate using 2 right side distance sensors
+void wall_snap(double known_x) {
+    float d_front = distance_in(rightDist);
+    float d_back  = distance_in(rightDistAlt);
+
+    float conf_f = sensor_confidence(d_front);
+    float conf_b = sensor_confidence(d_back);
+    if (conf_f == 0.0f || conf_b == 0.0f) return;
+
+    double y = ((d_front + d_back) / 2.0) + ((RIGHT_SENSOR_OFFSET + RIGHT_SENSOR_ALT_OFFSET) / 2);
+
+    chassis.odom_xy_set(known_x, y);
+}
+ 
+
+ //prints x, y, t values to brain screen (used for checking reliability)
+void print_odom() {
+    pros::lcd::print(0, "X: %.2f", chassis.odom_x_get());
+    pros::lcd::print(1, "Y: %.2f", chassis.odom_y_get());
+    pros::lcd::print(2, "T: %.2f", chassis.odom_theta_get());
 }

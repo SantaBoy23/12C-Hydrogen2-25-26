@@ -11,8 +11,8 @@ ez::Drive chassis(
 //  - you should get positive values on the encoders going FORWARD and RIGHT
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
-ez::tracking_wheel horiz_tracker(14, 2, -0.5);  // This tracking wheel is perpendicular to the drive wheels //was-0.73
-// ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
+ez::tracking_wheel horiz_tracker(14, 2, 1.25);  // This tracking wheel is perpendicular to the drive wheels //was-0.73
+ez::tracking_wheel vert_tracker(-7, 2, 0.7);   // This tracking wheel is parallel to the drive wheels
 
 void initialize() {
   ez::ez_template_print();  // Print EZ-Template branding
@@ -36,7 +36,7 @@ void initialize() {
 
   // Autonomous Selector
   ez::as::auton_selector.autons_add({
-      {"Middle Goal Antenna Auto for LEFT Side (4 + 3 + antenna)", elims_left_auto},
+      {"Random Testing", random_testing},
 
       {"Sig SOLO AWP (4 + 3 + 4)", sig_solo_awp},
       {"Middle Goal Antenna Auto for LEFT Side (4 + 3 + antenna)", elims_left_auto},
@@ -44,7 +44,7 @@ void initialize() {
       {"Antenna push auto for LEFT side (7 + antenna)", left_antenna_auto},
       {"Skills Auto", skills_auto},
 
-
+      {"Random Testing", random_testing},
       {"Drive\n\nDrive forward and come back", drive_example},
       {"Turn\n\nTurn 3 times.", turn_example},
       {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
