@@ -48,10 +48,11 @@ void IntakeControl() {
 
     else if (master.get_digital(DIGITAL_RIGHT)) {
         BottomIntakeMove(127);
-        TopIntakeMove(-110);
+        TopIntakeMove(-110); //-110 matches //-60 skills
         CenterDrop(true);
     }
 
+    //remove for skills
     else if (master.get_digital(DIGITAL_DOWN)) {
         BottomIntakeMove(127);
         TopIntakeMove(-80);

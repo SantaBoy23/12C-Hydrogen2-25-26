@@ -26,8 +26,8 @@ constexpr float RIGHT_SENSOR_SPACING = 5.35;
 // Field wall positions
 constexpr float WALL_X_LEFT   = 0.0;
 constexpr float WALL_X_RIGHT  = 140.0;
-constexpr float WALL_Y_BACK   = 0.0;
-constexpr float WALL_Y_FRONT  = 140.0;
+constexpr float WALL_Y_BACK   = 140.0;
+constexpr float WALL_Y_FRONT  = 0.0;
 
 double normalize_angle(double a) {
     while (a > 180) a -= 360;
@@ -158,17 +158,6 @@ void wall_drive_to_point(float x_target, float y_target, int speed) {
 }
 
 
-//turn to an angle using distance sensor input
-void turn_to_angle(double target_angle, int speed, double tol) {
-    chassis.pid_turn_set(target_angle, speed);
-
-    while (fabs(normalize_angle(chassis.odom_theta_get() - target_angle)) > tol) {
-        correct_odom_with_sensors();
-        pros::delay(10);
-    }
-}
-
-
 //move directly to a point using distance sensors 
 void wall_drive_to_point_direct(float x_target, float y_target, int speed) {
     double x = chassis.odom_x_get();
@@ -192,6 +181,17 @@ void wall_drive_to_point_direct(float x_target, float y_target, int speed) {
 }
 
 
+//turn to an angle using distance sensor input
+void turn_to_angle(double target_angle, int speed, double tol) {
+    chassis.pid_turn_set(target_angle, speed);
+
+    while (fabs(normalize_angle(chassis.odom_theta_get() - target_angle)) > tol) {
+        correct_odom_with_sensors();
+        pros::delay(10);
+    }
+}
+
+
 //function to find y coordinate using 2 right side distance sensors
 void wall_snap(double known_x) {
     float d_front = distance_in(rightDist);
@@ -201,7 +201,7 @@ void wall_snap(double known_x) {
     float conf_b = sensor_confidence(d_back);
     if (conf_f == 0.0f || conf_b == 0.0f) return;
 
-    double y = ((d_front + d_back) / 2.0) + ((RIGHT_SENSOR_OFFSET + RIGHT_SENSOR_ALT_OFFSET) / 2);
+    double y = WALL_Y_BACK - (((d_front + d_back) / 2.0) + ((RIGHT_SENSOR_OFFSET + RIGHT_SENSOR_ALT_OFFSET) / 2));
 
     chassis.odom_xy_set(known_x, y);
 }

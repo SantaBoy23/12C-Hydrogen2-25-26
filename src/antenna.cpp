@@ -6,6 +6,7 @@ void AntennaRaise(bool AntennaState) {
 }
 
 void AntennaControl() {
+    //remove during skills
     // //If b button is pressed, toggle Antenna state
     // Antenna.button_toggle(master.get_digital(DIGITAL_B));
 

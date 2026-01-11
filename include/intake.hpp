@@ -5,7 +5,7 @@
 
 // Declare motors, but do NOT construct them here.
 inline pros::Motor intakeBottom(10);
-inline pros::Motor intakeTop(-1);
+inline pros::Motor intakeTop(6);
 
 inline ez::Piston center('B');
 

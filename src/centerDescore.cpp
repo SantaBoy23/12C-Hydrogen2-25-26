@@ -6,6 +6,7 @@ void CenterDescoreRaise(bool CenterDescoreState) {
 }
 
 void CenterDescoreControl() {
+    //remove during skills
     //If Up Arrow is pressed, toggle Center Descore state
     centerDescore.button_toggle(master.get_digital(DIGITAL_UP));
 }
