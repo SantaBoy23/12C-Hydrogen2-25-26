@@ -2,7 +2,7 @@
 
 void default_constants();
 
-inline ez::Piston odomPod('E');
+inline ez::Piston odomPod('A');
 
 void OdomPodLift(bool OdomPodState);
 void OdomPodControl();
@@ -12,6 +12,8 @@ void elims_left_auto();
 void right_antenna_auto();
 void left_antenna_auto();
 void skills_auto();
+
+void generated_skills_auto();
 
 void random_testing();
 void drive_example();
