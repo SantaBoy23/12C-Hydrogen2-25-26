@@ -12,7 +12,7 @@ ez::Drive chassis(
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
 ez::tracking_wheel horiz_tracker(14, 2, 1.25);  // This tracking wheel is perpendicular to the drive wheels //was-0.73
-ez::tracking_wheel vert_tracker(-7, 2, 0.7);   // This tracking wheel is parallel to the drive wheels
+ez::tracking_wheel vert_tracker(-7, 2, .25);   // This tracking wheel is parallel to the drive wheels
 
 void initialize() {
   ez::ez_template_print();  // Print EZ-Template branding
@@ -36,7 +36,7 @@ void initialize() {
 
   // Autonomous Selector
   ez::as::auton_selector.autons_add({
-      {"Middle Goal Antenna Auto for LEFT Side (4 + 3 + antenna)", elims_left_auto},
+      {"Skills Auto", skills_auto},
 
       {"Sig SOLO AWP (4 + 3 + 4)", sig_solo_awp},
       {"Middle Goal Antenna Auto for LEFT Side (4 + 3 + antenna)", elims_left_auto},
