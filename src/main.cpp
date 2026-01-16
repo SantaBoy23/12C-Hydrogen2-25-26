@@ -36,7 +36,8 @@ void initialize() {
 
   // Autonomous Selector
   ez::as::auton_selector.autons_add({
-    
+
+      {"Local SOLO AWP (push + 3 + 2 + 3)", local_solo_awp},
       {"Sig SOLO AWP (4 + 3 + 4)", sig_solo_awp},
       {"Middle Goal Antenna Auto for LEFT Side (4 + 3 + antenna)", elims_left_auto},
       {"Antenna push auto for RIGHT side (7 + antenna)", right_antenna_auto},
