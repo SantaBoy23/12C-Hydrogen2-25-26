@@ -20,16 +20,18 @@ float sensor_confidence(float d);
 void correct_odom_with_sensors();
 
 // Wall drive and point to point movement
-void wall_drive_x(float x_target, int speed = 80);
-void wall_drive_y(float y_target, int speed = 80);
+void wall_drive_x(float x_target, double known_y, int speed = 80);
+void wall_drive_y(double known_x, float y_target, int speed = 80);
 void wall_drive_to_point(float x_target, float y_target, int speed = 80);
 void wall_drive_to_point_direct(float x_target, float y_target, int speed = 80);
+void wall_drive_to_point_fwd_y_back(double x_target, double y_target, int speed, double y_tol = 0.5);
+void wall_drive_to_point_fwd_y_front( double x_target, double y_target, int speed, double y_tol = 0.5);
 
 //angle correction
 void turn_to_angle(double target_angle, int speed = 90, double tol = 1.0);
 
 //measure correct y coordinate
-void wall_snap(double known_x);
+void wall_snap(double known_x, double known_t);
 
 void print_odom();
 

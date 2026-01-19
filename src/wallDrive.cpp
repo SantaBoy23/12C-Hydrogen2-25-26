@@ -98,7 +98,7 @@ void correct_odom_with_sensors() {
 
 
 //move along the wall on the x axis
-void wall_drive_x(float x_target, int speed) {
+void wall_drive_x(float x_target, double known_y, int speed) {
     double current_x = chassis.odom_x_get();
     double distance_to_drive = x_target - current_x;
 
@@ -108,14 +108,16 @@ void wall_drive_x(float x_target, int speed) {
         current_x = chassis.odom_x_get();
         distance_to_drive = x_target - current_x;
 
-        chassis.pid_odom_set(distance_to_drive, speed);
+        // chassis.pid_odom_set(distance_to_drive, speed);
+        // chassis.pid_wait();
+        chassis.pid_odom_set(x_target, known_y, speed);
         chassis.pid_wait();
     }
 }
 
 
 //move along the wall on the y axis
-void wall_drive_y(float y_target, int speed) {
+void wall_drive_y(double known_x, float y_target, int speed) {
     double current_y = chassis.odom_y_get();
     double distance_to_drive = y_target - current_y;
 
@@ -125,36 +127,134 @@ void wall_drive_y(float y_target, int speed) {
         current_y = chassis.odom_y_get();
         distance_to_drive = y_target - current_y;
 
-        chassis.pid_odom_set(distance_to_drive, speed);
+        // chassis.pid_odom_set(distance_to_drive, speed);
+        // chassis.pid_wait();
+
+        chassis.pid_odom_set(known_x, y_target, speed);
         chassis.pid_wait();
     }
 }
 
-void wall_drive_to_point(float x_target, float y_target, int speed) {
+// void wall_drive_to_point(float x_target, float y_target, int speed) {
 
-    //Move along x axis
-    double current_x = chassis.odom_x_get();
-    double dx = x_target - current_x;
+//     //Move along x axis
+//     double current_x = chassis.odom_x_get();
+//     double dx = x_target - current_x;
 
-    if (fabs(dx) > 0.5) {
-        double heading_x = (dx > 0) ? 0 : 180;
-        chassis.pid_turn_set(heading_x, 90);
-        chassis.pid_wait();
+//     if (fabs(dx) > 0.5) {
+//         double heading_x = (dx > 0) ? 0 : 180;
+//         chassis.pid_turn_set(heading_x, 90);
+//         chassis.pid_wait();
 
-        wall_drive_x(x_target, speed);
+//         wall_drive_x(x_target, y_target, speed);
+//     }
+
+//     // //move along y axis
+//     double current_y = chassis.odom_y_get();
+//     double dy = y_target - current_y;
+
+//     // if (fabs(dy) > 0.5) {
+//     //     double heading_y = (dy > 0) ? 90 : -90;
+//     //     chassis.pid_turn_set(heading_y, 90);
+//     //     chassis.pid_wait();
+
+//     //     wall_drive_y(y_target, speed);
+//     // }
+
+//     // keep moving until reach desired point
+//     if (fabs(dx) > 0.5) {
+//         double heading_y = (dy > 0) ? 90 : -90;
+//         chassis.pid_turn_set(heading_y, 0);
+//         chassis.pid_wait();
+
+//         wall_drive_y(x_target, y_target, speed);
+//     }
+//     else if (current_y > WALL_Y_BACK - y_target + FRONT_SENSOR_OFFSET){
+//         wall_drive_y(x_target, y_target, speed);
+//     }
+// }
+
+void wall_drive_to_point(double x_target, double y_target, int speed) {
+
+    chassis.pid_odom_set(x_target, y_target, speed);
+
+    while (true) {
+        correct_odom_with_sensors();
+
+        double dx = x_target - chassis.odom_x_get();
+        double dy = y_target - chassis.odom_y_get();
+
+        if (sqrt(dx*dx + dy*dy) < 0.75) break;
+        pros::delay(10);
+    }
+}
+
+
+void wall_drive_to_point_fwd_y_back(double x_target, double y_target, int speed, double y_tol = 0.5) {
+    // Face target
+    double dx = x_target - chassis.odom_x_get();
+    double dy = y_target - chassis.odom_y_get();
+    // double heading = atan2(dy, dx) * 180.0 / M_PI;
+
+    chassis.pid_turn_set(0_deg, 90);
+    chassis.pid_wait();
+
+    chassis.pid_odom_set(x_target, y_target, speed);
+
+    uint32_t start = pros::millis();
+
+    while (pros::millis() - start < 3000) { // safety timeout
+        correct_odom_with_sensors();
+
+        float d = distance_in(frontDist);
+        if (sensor_confidence(d) > 0.0f) {
+            double y_meas = WALL_Y_BACK - (d + FRONT_SENSOR_OFFSET);
+
+            if (fabs(y_meas - y_target) < y_tol) {
+                chassis.pid_odom_set(chassis.odom_x_get(), chassis.odom_y_get(), speed);
+                chassis.pid_wait_quick();
+                return;
+            }
+        }
+
+        pros::delay(10);
     }
 
-    //move along y axis
-    double current_y = chassis.odom_y_get();
-    double dy = y_target - current_y;
+    chassis.pid_wait(); // fallback
+}
 
-    if (fabs(dy) > 0.5) {
-        double heading_y = (dy > 0) ? 90 : -90;
-        chassis.pid_turn_set(heading_y, 90);
-        chassis.pid_wait();
 
-        wall_drive_y(y_target, speed);
+void wall_drive_to_point_fwd_y_front(double x_target, double y_target, int speed, double y_tol = 0.5) {
+    // Face target
+    double dx = x_target - chassis.odom_x_get();
+    double dy = y_target - chassis.odom_y_get();
+    // double heading = atan2(dy, dx) * 180.0 / M_PI;
+
+    chassis.pid_turn_set(180_deg, 90);
+    chassis.pid_wait();
+
+    chassis.pid_odom_set(x_target, y_target, speed);
+
+    uint32_t start = pros::millis();
+
+    while (pros::millis() - start < 3000) { // safety timeout
+        correct_odom_with_sensors();
+
+        float d = distance_in(frontDist);
+        if (sensor_confidence(d) > 0.0f) {
+            double y_meas = WALL_Y_FRONT + (d + FRONT_SENSOR_OFFSET);
+
+            if (fabs(y_meas - y_target) < y_tol) {
+                chassis.pid_odom_set(chassis.odom_x_get(), chassis.odom_y_get(), speed);
+                chassis.pid_wait_quick();
+                return;
+            }
+        }
+
+        pros::delay(10);
     }
+
+    chassis.pid_wait(); // fallback
 }
 
 
@@ -193,7 +293,7 @@ void turn_to_angle(double target_angle, int speed, double tol) {
 
 
 //function to find y coordinate using 2 right side distance sensors
-void wall_snap(double known_x) {
+void wall_snap(double known_x, double known_t) {
     float d_front = distance_in(rightDist);
     float d_back  = distance_in(rightDistAlt);
 
@@ -203,7 +303,7 @@ void wall_snap(double known_x) {
 
     double y = WALL_Y_BACK - (((d_front + d_back) / 2.0) + ((RIGHT_SENSOR_OFFSET + RIGHT_SENSOR_ALT_OFFSET) / 2));
 
-    chassis.odom_xy_set(known_x, y);
+    chassis.odom_xyt_set(known_x, y, known_t);
 }
  
 
