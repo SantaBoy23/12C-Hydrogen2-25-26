@@ -17,7 +17,7 @@ ez::tracking_wheel vert_tracker(-7, 2, .25);   // This tracking wheel is paralle
 void initialize() {
   ez::ez_template_print();  // Print EZ-Template branding
 
-  pros::delay(500);  // Allow legacy ports to initialize
+  pros::delay(1000);  // Allow legacy ports to initialize
 
   // Configure intake motors
   intakeTop.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
@@ -37,12 +37,15 @@ void initialize() {
   // Autonomous Selector
   ez::as::auton_selector.autons_add({
 
-      {"Local SOLO AWP (push + 3 + 2 + 3)", local_solo_awp},
-      {"Sig SOLO AWP (4 + 3 + 4)", sig_solo_awp},
+
       {"Middle Goal Antenna Auto for LEFT Side (4 + 3 + antenna)", elims_left_auto},
       {"Antenna push auto for RIGHT side (7 + antenna)", right_antenna_auto},
-      {"Antenna push auto for LEFT side (7 + antenna)", left_antenna_auto},
+      {"Sig SOLO AWP (4 + 3 + 4)", sig_solo_awp},
       {"Skills Auto", skills_auto},
+
+      {"Local SOLO AWP (push + 3 + 2 + 3)", local_solo_awp},
+
+      {"Antenna push auto for LEFT side (7 + antenna)", left_antenna_auto},
 
       {"Random Testing", random_testing},
       {"Drive\n\nDrive forward and come back", drive_example},
@@ -164,11 +167,12 @@ void ez_template_extras() {
 // Driver Control
 void opcontrol() {
 
-  // AntennaRaise(true); //add for skills
-  OdomPodLift(true);
 
 
   pros::delay(500);  // Allow ports to initialize
+
+  // AntennaRaise(true); //add for skills
+  OdomPodLift(true);
 
   chassis.drive_brake_set(MOTOR_BRAKE_COAST); // Switch motor brakes to coast
 
