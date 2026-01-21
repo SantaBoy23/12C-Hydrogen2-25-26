@@ -190,7 +190,7 @@ void wall_drive_to_point(double x_target, double y_target, int speed) {
 }
 
 
-void wall_drive_to_point_fwd_y_back(double x_target, double y_target, int speed, double y_tol = 0.5) {
+void wall_drive_to_point_fwd_y_back(double x_target, double y_target, int speed, double y_tol) {
     // Face target
     double dx = x_target - chassis.odom_x_get();
     double dy = y_target - chassis.odom_y_get();
@@ -224,7 +224,7 @@ void wall_drive_to_point_fwd_y_back(double x_target, double y_target, int speed,
 }
 
 
-void wall_drive_to_point_fwd_y_front(double x_target, double y_target, int speed, double y_tol = 0.5) {
+void wall_drive_to_point_fwd_y_front(double x_target, double y_target, int speed, double y_tol) {
     // Face target
     double dx = x_target - chassis.odom_x_get();
     double dy = y_target - chassis.odom_y_get();

@@ -13,6 +13,7 @@ void elims_left_auto();
 void right_antenna_auto();
 void left_antenna_auto();
 void skills_auto();
+void santi_auto();
 
 void random_testing();
 void drive_example();
