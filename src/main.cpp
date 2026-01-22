@@ -17,7 +17,7 @@ ez::tracking_wheel vert_tracker(-7, 2, .25);   // This tracking wheel is paralle
 void initialize() {
   ez::ez_template_print();  // Print EZ-Template branding
 
-  pros::delay(1000);  // Allow legacy ports to initialize
+  pros::delay(1500);  // Allow legacy ports to initialize
 
   // Configure intake motors
   intakeTop.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
@@ -36,17 +36,17 @@ void initialize() {
 
   // Autonomous Selector
   ez::as::auton_selector.autons_add({
-      {"Goon auto", santi_auto},
+      // {"4 block goal rush on RIGHT side\n\n(4 + antenna)", block_rush_right},
       {"Skills Auto", skills_auto},
 
-      {"Middle Goal Antenna Auto for LEFT Side (4 + 3 + antenna)", elims_left_auto},
-      {"Antenna push auto for RIGHT side (7 + antenna)", right_antenna_auto},
-      {"Sig SOLO AWP (4 + 3 + 4)", sig_solo_awp},
+      {"Middle Goal Antenna Auto for LEFT Side\n\n(4 + 3 + antenna)", elims_left_auto},
+      {"Antenna push auto for RIGHT side\n\n(7 + antenna)", right_antenna_auto},
+      {"Sig SOLO AWP\n\n(4 + 3 + 4)", sig_solo_awp},
       {"Skills Auto", skills_auto},
 
-      {"Local SOLO AWP (push + 3 + 2 + 3)", local_solo_awp},
+      {"Local SOLO AWP \n\npush + 4 + 3 + 3)", local_solo_awp},
 
-      {"Antenna push auto for LEFT side (7 + antenna)", left_antenna_auto},
+      {"Antenna push auto for LEFT side\n\n(7 + antenna)", left_antenna_auto},
 
       {"Random Testing", random_testing},
       {"Drive\n\nDrive forward and come back", drive_example},
