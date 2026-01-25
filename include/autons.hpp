@@ -7,7 +7,7 @@ inline ez::Piston odomPod('A');
 void OdomPodLift(bool OdomPodState);
 void OdomPodControl();
 
-void local_solo_awp ();
+void push_solo_awp ();
 void sig_solo_awp ();
 void elims_left_auto();
 void right_antenna_auto();

@@ -36,7 +36,7 @@ void initialize() {
 
   // Autonomous Selector
   ez::as::auton_selector.autons_add({
-      // {"4 block goal rush on RIGHT side\n\n(4 + antenna)", block_rush_right},
+      {"PUSH sig SOLO AWP \n\npush + 4 + 3 + 3)", push_solo_awp},
       {"Skills Auto", skills_auto},
 
       {"Middle Goal Antenna Auto for LEFT Side\n\n(4 + 3 + antenna)", elims_left_auto},
@@ -44,7 +44,7 @@ void initialize() {
       {"Sig SOLO AWP\n\n(4 + 3 + 4)", sig_solo_awp},
       {"Skills Auto", skills_auto},
 
-      {"Local SOLO AWP \n\npush + 4 + 3 + 3)", local_solo_awp},
+      {"PUSH sig SOLO AWP \n\npush + 4 + 3 + 3)", push_solo_awp},
 
       {"Antenna push auto for LEFT side\n\n(7 + antenna)", left_antenna_auto},
 
