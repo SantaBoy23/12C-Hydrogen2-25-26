@@ -42,20 +42,19 @@ void IntakeControl() {
 
     // If R2 is pressed, spin intake backwards
     else if (master.get_digital(DIGITAL_R2)) {
-        BottomIntakeMove(-127);
+        BottomIntakeMove(-127); //-127 matches //-80 skills
         TopIntakeMove(-127);
     }
 
     else if (master.get_digital(DIGITAL_RIGHT)) {
         BottomIntakeMove(127);
-        TopIntakeMove(-110); //-110 matches //-60 skills
+        TopIntakeMove(-110); //-110 matches //-45 skills
         CenterDrop(true);
     }
 
-    //remove for skills
     else if (master.get_digital(DIGITAL_DOWN)) {
         BottomIntakeMove(127);
-        TopIntakeMove(-80);
+        TopIntakeMove(-80); //-80 matchs //-30 skills
         CenterDrop(true);
     }
 
