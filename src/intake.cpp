@@ -19,8 +19,8 @@ void CenterDrop(bool CenterState) {
     center.set(CenterState);
 }
 
-void CenterControl() {
-
+void BottomDrop(bool BottomState) {
+    bottom.set(BottomState);
 }
 
 // Function for intake driver control
@@ -58,11 +58,18 @@ void IntakeControl() {
         CenterDrop(true);
     }
 
+    else if (master.get_digital(DIGITAL_LEFT)) {
+        BottomIntakeMove(-127);
+        TopIntakeMove(-127);
+        BottomDrop(true);
+    }
+
     // If no button is pressed, stop intake from spinning
     else {
         BottomIntakeMove(0);
         TopIntakeMove(0);
         CenterDrop(false);
+        BottomDrop(false);
     }
 }
 

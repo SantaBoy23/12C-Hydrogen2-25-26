@@ -188,7 +188,6 @@ void opcontrol() {
     OdomPodControl();
     AntennaControl();
     MatchLoadControl();
-    CenterControl();
     ParkControl();
     CenterDescoreControl();
 
