@@ -31,7 +31,7 @@ void wall_drive_to_point_fwd_y_front( double x_target, double y_target, int spee
 void turn_to_angle(double target_angle, int speed = 90, double tol = 1.0);
 
 //measure correct y coordinate
-void wall_snap(double known_x, double known_t);
+void wall_snap(double known_x);
 
 void print_odom();
 

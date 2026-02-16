@@ -8,8 +8,10 @@ void OdomPodLift(bool OdomPodState);
 void OdomPodControl();
 
 void push_solo_awp ();
+void push_alt_solo_awp ();
 void sig_solo_awp ();
 void elims_left_auto();
+void elims_right_auto();
 void right_antenna_auto();
 void left_antenna_auto();
 void skills_auto();

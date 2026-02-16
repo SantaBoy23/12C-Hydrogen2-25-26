@@ -11,8 +11,8 @@ ez::Drive chassis(
 //  - you should get positive values on the encoders going FORWARD and RIGHT
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
-ez::tracking_wheel horiz_tracker(14, 2, 1.25);  // This tracking wheel is perpendicular to the drive wheels //was-0.73
-ez::tracking_wheel vert_tracker(-7, 2, .25);   // This tracking wheel is parallel to the drive wheels
+ez::tracking_wheel horiz_tracker(-17, 2, -0.5);  // This tracking wheel is perpendicular to the drive wheels //was-0.73
+ez::tracking_wheel vert_tracker(7, 2, .25);   // This tracking wheel is parallel to the drive wheels
 
 void initialize() {
   ez::ez_template_print();  // Print EZ-Template branding
@@ -36,19 +36,20 @@ void initialize() {
 
   // Autonomous Selector
   ez::as::auton_selector.autons_add({
+      // {"Skills Auto", skills_auto},
 
-      // {"PUSH sig SOLO AWP \n\npush + 4 + 3 + 3)", push_solo_awp},
-      {"4 block", block_rush_right},
+      // {"PUSH sig SOLO AWP \n\n(push + 5 + 3 + 3)", push_solo_awp},
 
+      // {"PUSH sig SOLO AWP \n\n(push + 5 + 3 + 3)", push_solo_awp},
       {"Middle Goal Antenna Auto for LEFT Side\n\n(4 + 3 + antenna)", elims_left_auto},
-      {"PUSH sig SOLO AWP \n\npush + 4 + 3 + 3)", push_solo_awp},
       {"Antenna push auto for RIGHT side\n\n(7 + antenna)", right_antenna_auto},
-      {"PUSH sig SOLO AWP \n\npush + 4 + 3 + 3)", push_solo_awp},
+      {"4 block", block_rush_right},
       {"Skills Auto", skills_auto},
 
       {"Sig SOLO AWP\n\n(4 + 3 + 4)", sig_solo_awp},
-      {"PUSH sig SOLO AWP \n\npush + 4 + 3 + 3)", push_solo_awp},
+      {"PUSH sig SOLO AWP \n\n(push + 5 + 3 + 3)", push_solo_awp},
 
+      {"Middle Goal Antenna Auto for RIGHT Side\n\n(4 + 3 + antenna)", elims_right_auto},
       {"Antenna push auto for LEFT side\n\n(7 + antenna)", left_antenna_auto},
 
       {"Random Testing", random_testing},

@@ -12,7 +12,7 @@ inline ez::Piston bottom('G');
 
 void IntakeLiftDrop(bool IntakeLiftState);
 void CenterDrop(bool CenterState);
-void BottomDrop(bool BottomState);
+void BottomContract(bool BottomState);
 
 void BottomIntakeMove(int speed);
 void TopIntakeMove(int speed);

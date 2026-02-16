@@ -229,7 +229,6 @@ void wall_drive_to_point_fwd_y_front(double x_target, double y_target, int speed
     double dx = x_target - chassis.odom_x_get();
     double dy = y_target - chassis.odom_y_get();
     // double heading = atan2(dy, dx) * 180.0 / M_PI;
-
     chassis.pid_turn_set(180_deg, 90);
     chassis.pid_wait();
 
@@ -293,7 +292,7 @@ void turn_to_angle(double target_angle, int speed, double tol) {
 
 
 //function to find y coordinate using 2 right side distance sensors
-void wall_snap(double known_x, double known_t) {
+void wall_snap(double known_x) {
     float d_front = distance_in(rightDist);
     float d_back  = distance_in(rightDistAlt);
 
@@ -303,7 +302,16 @@ void wall_snap(double known_x, double known_t) {
 
     double y = WALL_Y_BACK - (((d_front + d_back) / 2.0) + ((RIGHT_SENSOR_OFFSET + RIGHT_SENSOR_ALT_OFFSET) / 2));
 
-    chassis.odom_xyt_set(known_x, y, known_t);
+    double delta = fabs(d_front - d_back);
+
+    double horizontal = sqrt(
+        RIGHT_SENSOR_SPACING * RIGHT_SENSOR_SPACING
+        - delta * delta
+    );
+
+    double t = atan2(delta, horizontal);
+
+    chassis.odom_xyt_set(known_x, y, t);
 }
  
 

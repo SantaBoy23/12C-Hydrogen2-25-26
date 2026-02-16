@@ -19,7 +19,7 @@ void CenterDrop(bool CenterState) {
     center.set(CenterState);
 }
 
-void BottomDrop(bool BottomState) {
+void BottomContract(bool BottomState) {
     bottom.set(BottomState);
 }
 
@@ -59,17 +59,20 @@ void IntakeControl() {
     }
 
     else if (master.get_digital(DIGITAL_LEFT)) {
-        BottomIntakeMove(-127);
+        BottomIntakeMove(-100);
         TopIntakeMove(-127);
-        BottomDrop(true);
+        BottomContract(true);
+    }
+        else if (master.get_digital(DIGITAL_X)) {
+        BottomContract(true);
     }
 
-    // If no button is pressed, stop intake from spinning
+    // If no button is pressed, stop intake from spinning, raise center piston, and uncontract bottom scoring piston
     else {
         BottomIntakeMove(0);
         TopIntakeMove(0);
         CenterDrop(false);
-        BottomDrop(false);
+        BottomContract(false);
     }
 }
 
