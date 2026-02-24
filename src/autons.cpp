@@ -46,16 +46,16 @@ void default_constants() {
 
   // Slew constants
   chassis.slew_turn_constants_set(3_deg, 70);
-  chassis.slew_drive_constants_set(3_in, 70);
+  chassis.slew_drive_constants_set(3_in, 60);
   chassis.slew_swing_constants_set(3_in, 80);
 
   // The amount that turns are prioritized over driving in odom motions
   // - if you have tracking wheels, you can run this higher.  1.0 is the max
-  chassis.odom_turn_bias_set(0.99); //was 0.9 //was 0.9
+  chassis.odom_turn_bias_set(1.0); //was 0.9 //was 0.99
 
-  chassis.odom_look_ahead_set(7_in);           // This is how far ahead in the path the robot looks at
-  chassis.odom_boomerang_distance_set(16_in);  // This sets the maximum distance away from target that the carrot point can be
-  chassis.odom_boomerang_dlead_set(0.625);     // This handles how aggressive the end of boomerang motions are
+  chassis.odom_look_ahead_set(10_in);           // This is how far ahead in the path the robot looks at
+  chassis.odom_boomerang_distance_set(10_in);  // This sets the maximum distance away from target that the carrot point can be
+  chassis.odom_boomerang_dlead_set(0.5);     // This handles how aggressive the end of boomerang motions are //was .625
 
   chassis.pid_angle_behavior_set(ez::shortest);  // Changes the default behavior for turning, this defaults it to the shortest path there
 }
@@ -1153,8 +1153,12 @@ void block_rush_right (){
 
 void random_testing (){
   //random wall ride tests
-  // chassis.odom_xyt_set(0_in, 0_in, 0_deg);
-  // wall_drive_y(100, 127);
+  chassis.odom_xyt_set(10_in, 24_in, 0_deg);
+  // AntennaRaise(true);
+  // wall_drive_to_point_fwd_y_front(12, 72, 127, 24);
+  wall_check(10, 24);
+  print_odom();
+  // wall_drive_y(10, -96, 110);
 
   // //Set starting angle
   // chassis.odom_xyt_set(0_in, 0_in, 0_deg);
@@ -1243,32 +1247,32 @@ void random_testing (){
 // void drive_set(int left, int right);
 
 
-  ////////park zone push test
-  //lift odom pod and start intake
-  chassis.odom_xyt_set(87_in, 8_in, 90_deg);
-  OdomPodLift(true);
-  BottomIntakeMove(127);
-  TopIntakeMove(-127);
-  chassis.pid_drive_set(7_in, 127);
-  chassis.pid_wait_quick_chain();
+  // ////////park zone push test
+  // //lift odom pod and start intake
+  // chassis.odom_xyt_set(87_in, 8_in, 90_deg);
+  // OdomPodLift(true);
+  // BottomIntakeMove(127);
+  // TopIntakeMove(-127);
+  // chassis.pid_drive_set(7_in, 127);
+  // chassis.pid_wait_quick_chain();
 
 
-  //push into park zone
-  chassis.pid_drive_set(-56_in, 127);
-  chassis.pid_wait_quick_chain();
-  chassis.pid_drive_set(-26_in, 90);
-  chassis.pid_wait_quick_chain();
-  chassis.pid_drive_set(-18_in, 50);
-  chassis.pid_wait();
+  // //push into park zone
+  // chassis.pid_drive_set(-56_in, 127);
+  // chassis.pid_wait_quick_chain();
+  // chassis.pid_drive_set(-26_in, 90);
+  // chassis.pid_wait_quick_chain();
+  // chassis.pid_drive_set(-18_in, 50);
+  // chassis.pid_wait();
 
-  //drop odom pod and wall snap
-  OdomPodLift(false);
-  // wall_snap(32);
-  pros::delay(500);
+  // //drop odom pod and wall snap
+  // OdomPodLift(false);
+  // // wall_snap(32);
+  // pros::delay(500);
 
-  //pull away from loader
-  chassis.pid_drive_set(3_in, 110);
-  chassis.pid_wait();
+  // //pull away from loader
+  // chassis.pid_drive_set(3_in, 110);
+  // chassis.pid_wait();
 
 
 
@@ -1282,13 +1286,13 @@ void drive_example() {
   // The third parameter is a boolean (true or false) for enabling/disabling a slew at the start of drive motions
   // for slew, only enable it when the drive distance is greater than the slew distance + a few inches
 
-  chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(-24_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(-12_in, DRIVE_SPEED);
+  chassis.pid_drive_set(12_in, DRIVE_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(-12_in, DRIVE_SPEED);
+  chassis.pid_drive_set(12_in, DRIVE_SPEED);
   chassis.pid_wait();
 }
 
@@ -1464,13 +1468,13 @@ void odom_drive_example() {
   // You can replace pid_drive_set with pid_odom_set and your robot will
   // have better error correction.
 
-  chassis.pid_odom_set(24_in, DRIVE_SPEED, true);
+  chassis.pid_odom_set(-24_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
-  chassis.pid_odom_set(-12_in, DRIVE_SPEED);
+  chassis.pid_odom_set(12_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
-  chassis.pid_odom_set(-12_in, DRIVE_SPEED);
+  chassis.pid_odom_set(12_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 }
 

@@ -11,8 +11,8 @@ ez::Drive chassis(
 //  - you should get positive values on the encoders going FORWARD and RIGHT
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
-ez::tracking_wheel horiz_tracker(-17, 2, -0.5);  // This tracking wheel is perpendicular to the drive wheels //was-0.73
-ez::tracking_wheel vert_tracker(7, 2, .25);   // This tracking wheel is parallel to the drive wheels
+ez::tracking_wheel horiz_tracker(-17, 2, -0.25);  // This tracking wheel is perpendicular to the drive wheels
+ez::tracking_wheel vert_tracker(7, 2, -1.25);   // This tracking wheel is parallel to the drive wheels
 
 void initialize() {
   ez::ez_template_print();  // Print EZ-Template branding
@@ -36,6 +36,8 @@ void initialize() {
 
   // Autonomous Selector
   ez::as::auton_selector.autons_add({
+      {"Random Testing", random_testing},
+
       // {"Skills Auto", skills_auto},
 
       // {"PUSH sig SOLO AWP \n\n(push + 5 + 3 + 3)", push_solo_awp},
@@ -177,7 +179,7 @@ void opcontrol() {
   // pros::delay(500);  // Allow ports to initialize
 
   // AntennaRaise(true); //add for skills
-  OdomPodLift(true);
+  // OdomPodLift(true);
 
   chassis.drive_brake_set(MOTOR_BRAKE_COAST); // Switch motor brakes to coast
 

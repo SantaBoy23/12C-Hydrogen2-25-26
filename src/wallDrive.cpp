@@ -118,6 +118,9 @@ void wall_drive_x(float x_target, double known_y, int speed) {
 
 //move along the wall on the y axis
 void wall_drive_y(double known_x, float y_target, int speed) {
+    chassis.pid_turn_set(0, 110); //was-1 //was 0
+    chassis.pid_wait_quick_chain();
+    float d_front = distance_in(frontDist);
     double current_y = chassis.odom_y_get();
     double distance_to_drive = y_target - current_y;
 
@@ -127,11 +130,11 @@ void wall_drive_y(double known_x, float y_target, int speed) {
         current_y = chassis.odom_y_get();
         distance_to_drive = y_target - current_y;
 
-        // chassis.pid_odom_set(distance_to_drive, speed);
-        // chassis.pid_wait();
-
-        chassis.pid_odom_set(known_x, y_target, speed);
+        chassis.pid_odom_set(distance_to_drive, speed);
         chassis.pid_wait();
+
+        // chassis.pid_odom_set(known_x, y_target, speed);
+        // chassis.pid_wait();
     }
 }
 
@@ -229,8 +232,8 @@ void wall_drive_to_point_fwd_y_front(double x_target, double y_target, int speed
     double dx = x_target - chassis.odom_x_get();
     double dy = y_target - chassis.odom_y_get();
     // double heading = atan2(dy, dx) * 180.0 / M_PI;
-    chassis.pid_turn_set(180_deg, 90);
-    chassis.pid_wait();
+    // chassis.pid_turn_set(0_deg, 90);
+    // chassis.pid_wait();
 
     chassis.pid_odom_set(x_target, y_target, speed);
 
@@ -312,6 +315,26 @@ void wall_snap(double known_x) {
     double t = atan2(delta, horizontal);
 
     chassis.odom_xyt_set(known_x, y, t);
+}
+
+void wall_check(double known_x, double known_y) {
+    float d_front = distance_in(rightDist);
+    float d_back  = distance_in(rightDistAlt);
+
+    float conf_f = sensor_confidence(d_front);
+    float conf_b = sensor_confidence(d_back);
+    if (conf_f == 0.0f || conf_b == 0.0f) return;
+
+    double y = WALL_Y_BACK - (((d_front + d_back) / 2.0) + ((RIGHT_SENSOR_OFFSET + RIGHT_SENSOR_ALT_OFFSET) / 2));
+
+    double delta = fabs(d_front - d_back);
+
+    double horizontal = sqrt(RIGHT_SENSOR_SPACING * RIGHT_SENSOR_SPACING - delta * delta
+    );
+
+    double t = ((atan2(delta, horizontal)) * 100);
+
+    chassis.odom_xyt_set(known_x, known_y, t);
 }
  
 

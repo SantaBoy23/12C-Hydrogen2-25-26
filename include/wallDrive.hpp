@@ -32,6 +32,7 @@ void turn_to_angle(double target_angle, int speed = 90, double tol = 1.0);
 
 //measure correct y coordinate
 void wall_snap(double known_x);
+void wall_check(double known_x, double known_y);
 
 void print_odom();
 
