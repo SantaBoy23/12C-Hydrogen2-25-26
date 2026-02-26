@@ -5,7 +5,7 @@
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
-//Individual data points from sensors, motors, pistons
+//individual data points from sensors, motors, pistons
 struct SkillsDataPoint {
     double timestamp;
     double rotation;
@@ -18,9 +18,10 @@ struct SkillsDataPoint {
     bool center_piston;
     bool match_load_piston;
     bool odom_pod_piston;
+    bool odom_reset;
 };
 
-//define functiosn
+//define values for functiosn 
 std::vector<SkillsDataPoint> recordedSkillsData;
 bool recordingSkills = false;
 double skillsRecordingStartTime = 0;
@@ -29,7 +30,7 @@ int playbackSkillsIndex = 0;
 double playbackSkillsStartTime = 0;
 
 //how often its samppled
-const int SAMPLE_RATE_MS = 5;
+const int SAMPLE_RATE_MS = 3; //was5 ms //was3 ms
 
 //normal motor declarations
 ez::Drive chassis(
@@ -39,15 +40,15 @@ ez::Drive chassis(
 );
 
 //odom wheel declarations
-ez::tracking_wheel horiz_tracker(14, 2, 1.25);
-ez::tracking_wheel vert_tracker(-7, 2, 0.7);
+ez::tracking_wheel horiz_tracker(-17, 2, -0.25);  // This tracking wheel is perpendicular to the drive wheels
+ez::tracking_wheel vert_tracker(7, 2, -1.25);   // This tracking wheel is parallel to the drive wheels
 
 //turns the data points listed above into a CSV file that can be reread later on
 std::string skillsDataPointToCSV(const SkillsDataPoint& point) {
     std::stringstream ss;
     ss << point.timestamp << "," << point.rotation << "," << point.odom_x << "," << point.odom_y << ","
        << point.left_drive << "," << point.right_drive << "," << point.intake_top << "," << point.intake_bottom << ","
-       << point.center_piston << "," << point.match_load_piston << "," << point.odom_pod_piston;
+       << point.center_piston << "," << point.match_load_piston << "," << point.odom_pod_piston << "," << point.odom_reset;
     return ss.str();
 }
 
@@ -68,6 +69,7 @@ SkillsDataPoint skillsCSVLineToDataPoint(const std::string& line) {
     std::getline(ss, token, ','); point.center_piston = std::stoi(token);
     std::getline(ss, token, ','); point.match_load_piston = std::stoi(token);
     std::getline(ss, token, ','); point.odom_pod_piston = std::stoi(token);
+    std::getline(ss, token, ','); point.odom_reset = std::stoi(token);
     
     return point;
 }
@@ -96,6 +98,7 @@ void recordSkillsDataPoint() {
     point.center_piston = center.get();
     point.match_load_piston = matchLoad.get();
     point.odom_pod_piston = odomPod.get();
+    point.odom_reset = 1;
     
     recordedSkillsData.push_back(point);
 }
@@ -105,7 +108,7 @@ bool saveSkillsRecording(const char* filename) {
     std::ofstream file(filename);
     if (!file.is_open()) return false;
     
-    file << "timestamp,rotation,odom_x,odom_y,left_drive,right_drive,intake_top,intake_bottom,center_piston,match_load_piston,odom_pod_piston\n";
+    file << "timestamp,rotation,odom_x,odom_y,left_drive,right_drive,intake_top,intake_bottom,center_piston,match_load_piston,odom_pod_piston, odom_reset\n";
     for (const auto& point : recordedSkillsData) {
         file << skillsDataPointToCSV(point) << "\n";
     }
@@ -211,6 +214,7 @@ void initialize() {
   default_constants();
 
   ez::as::auton_selector.autons_add({
+      {"Playback auto testing", generated_skills_auto},
       {"Middle Goal Antenna Auto for LEFT Side", elims_left_auto},
       {"Sig SOLO AWP", sig_solo_awp},
       {"Right Antenna Auto", right_antenna_auto},
@@ -291,9 +295,9 @@ void ez_template_extras() {
 
 //driver control with built in playback buttons for starting, stopping, etc
 void opcontrol() {
-  OdomPodLift(true);
+  // OdomPodLift(true);
   pros::delay(500);
-  chassis.drive_brake_set(MOTOR_BRAKE_COAST);
+  chassis.drive_brake_set(MOTOR_BRAKE_BRAKE);
 
   bool recordingMode = false;
   bool playbackMode = false;
@@ -324,6 +328,12 @@ void opcontrol() {
           startSkillsPlayback();
           printf("Press DOWN to stop playback\n");
         }
+      }
+    }
+
+    if (master.get_digital_new_press(DIGITAL_B)) {
+      if (recordingMode) {
+        
       }
     }
 
