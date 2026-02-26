@@ -36,11 +36,11 @@ void initialize() {
 
   // Autonomous Selector
   ez::as::auton_selector.autons_add({
-      {"Random Testing", random_testing},
+      // {"Random Testing", random_testing},
 
-      // {"Skills Auto", skills_auto},
+      {"Skills Auto", skills_auto},
 
-      // {"PUSH sig SOLO AWP \n\n(push + 5 + 3 + 3)", push_solo_awp},
+      {"PUSH sig SOLO AWP \n\n(push + 5 + 3 + 3)", push_solo_awp},
 
       // {"PUSH sig SOLO AWP \n\n(push + 5 + 3 + 3)", push_solo_awp},
       {"Middle Goal Antenna Auto for LEFT Side\n\n(4 + 3 + antenna)", elims_left_auto},
