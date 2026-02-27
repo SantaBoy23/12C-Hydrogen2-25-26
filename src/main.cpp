@@ -38,7 +38,7 @@ void initialize() {
   ez::as::auton_selector.autons_add({
       // {"Random Testing", random_testing},
 
-      {"Skills Auto", skills_auto},
+      // {"Skills Auto", skills_auto},
 
       {"PUSH sig SOLO AWP \n\n(push + 5 + 3 + 3)", push_solo_awp},
 
