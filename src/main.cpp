@@ -38,6 +38,8 @@ void initialize() {
   ez::as::auton_selector.autons_add({
       // {"Random Testing", random_testing},
 
+      {"Antenna push auto for RIGHT side\n\n(7 + antenna)", right_antenna_auto},
+
       // {"Skills Auto", skills_auto},
 
       {"PUSH sig SOLO AWP \n\n(push + 5 + 3 + 3)", push_solo_awp},
@@ -179,7 +181,7 @@ void opcontrol() {
   // pros::delay(500);  // Allow ports to initialize
 
   // AntennaRaise(true); //add for skills
-  // OdomPodLift(true);
+  OdomPodLift(true);
 
   chassis.drive_brake_set(MOTOR_BRAKE_COAST); // Switch motor brakes to coast
 
