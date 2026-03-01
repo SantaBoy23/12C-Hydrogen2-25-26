@@ -36,10 +36,7 @@ void initialize() {
 
   // Autonomous Selector
   ez::as::auton_selector.autons_add({
-      // {"Random Testing", random_testing},
-
-      {"Antenna push auto for RIGHT side\n\n(7 + antenna)", right_antenna_auto},
-
+      {"Sig SOLO AWP\n\n(4 + 3 + 4)", sig_solo_awp},
       // {"Skills Auto", skills_auto},
 
       {"PUSH sig SOLO AWP \n\n(push + 5 + 3 + 3)", push_solo_awp},
