@@ -314,7 +314,7 @@ void wall_snap(double known_x) {
 
     double t = atan2(delta, horizontal);
 
-    chassis.odom_xyt_set(known_x, y, t);
+    chassis.odom_xy_set(known_x, y);
 }
 
 void wall_check(double known_x, double known_y) {

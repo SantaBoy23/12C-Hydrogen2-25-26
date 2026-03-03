@@ -15,7 +15,9 @@ void elims_right_auto();
 void right_antenna_auto();
 void left_antenna_auto();
 void skills_auto();
-void block_rush_right ();
+void four_block_right();
+void nine_block_left();
+void nine_block_right();
 
 void random_testing();
 void drive_example();
