@@ -59,12 +59,96 @@ void default_constants() {
 
   chassis.pid_angle_behavior_set(ez::shortest);  // Changes the default behavior for turning, this defaults it to the shortest path there
 }
+void left_counter_auto() {
+  //set starting angle
+  chassis.drive_angle_set(270_deg);
+  chassis.odom_xyt_set(60_in, 23_in, 270_deg);
+
+  //move back towards match loader
+  intakeTop.move(-127);
+  intakeBottom.move(127);
+  chassis.pid_drive_set(29.15_in, 127);
+  pros::delay(1000);
+  AntennaRaise(true);
+  MatchLoadDrop(true);
+
+  //turn to face match loader
+  chassis.pid_turn_set(3_deg, TURN_SPEED); //was-1 //was 0
+  chassis.pid_wait_quick_chain();
+
+  //move into match loader and collect 3 blocks
+  intakeBottom.move(100);
+  chassis.pid_odom_set({{24.0_in, 5.65_in}, rev, 100}, true); //was27,7
+  pros::delay(1050);
+
+  //move forward into long goal and empty blocks
+  chassis.pid_odom_set({{22.75_in, 36.0_in}, fwd, 127}, true);
+  pros::delay(700);
+  // chassis.pid_speed_max_set(50);
+  intakeTop.move(127);
+  intakeBottom.move(127);
+  pros::delay(100);
+  chassis.pid_drive_set(1.5_in, 110);
+  pros::delay(750);
+  chassis.odom_xy_set(24_in, 43_in);
+  AntennaRaise(false);
+  MatchLoadDrop(false);
+
+  //pull out of long goal and turn to face center goal
+  chassis.pid_odom_set({{24_in, 24_in}, rev, 110}, true); //was27,7
+  chassis.pid_wait();
+  intakeTop.move(-127);
+  chassis.pid_turn_set(225_deg, TURN_SPEED); //was-1 //was 0
+  chassis.pid_wait_quick_chain();
+
+  //move to cluster of 3 blocks and pick them up
+  chassis.pid_odom_set({{49_in, 48.0_in}, rev, 127}, true);
+  pros::delay(750);
+  MatchLoadDrop(true);
+  chassis.pid_wait();
+
+  //do a 180
+  chassis.pid_turn_set(45_deg, TURN_SPEED); //was-1 //was 0
+  chassis.pid_wait_quick_chain();
+
+  //move to center goal and deposit blocks
+  chassis.pid_odom_set({{57.0_in, 62.75_in}, fwd, 120}, true);
+  chassis.pid_wait_until(21_in);
+  CenterDrop(true);  
+  intakeTop.move(-55);
+  chassis.pid_wait_quick();
+  pros::delay(150);
+  chassis.pid_drive_set(1.25_in, 127);
+  intakeTop.move(-80);
+  pros::delay(950);
+
+  //pull back, lift center descore, and push forwards
+  chassis.pid_drive_set(-7.5_in, 127);
+  chassis.pid_wait_quick_chain();
+  CenterDescoreRaise(true);
+  chassis.pid_drive_set(8_in, 127);
+  chassis.pid_wait_quick_chain();
+  MatchLoadDrop(false);
+
+  //pull back towards long goal
+  chassis.pid_odom_set({{35_in, 37_in}, rev, 110}, true); //was27,7
+  chassis.pid_wait();
+  CenterDescoreRaise(false);
+
+  //turn towards long goal
+  chassis.pid_turn_set(180_deg, TURN_SPEED); //was-1 //was 0
+  chassis.pid_wait_quick_chain();
+
+  //push antenna into long goal
+  chassis.pid_odom_set({{38.0_in, 70_in}, rev, 110}, true); //was27,7
+  chassis.pid_wait();
+
+}
 
 void elims_left_auto() {
   //set starting angle
   chassis.drive_angle_set(180_deg);
   chassis.odom_xyt_set(60_in, 26_in, 180_deg);
-
 
   //start intake
   intakeTop.move(-127);
@@ -1407,8 +1491,11 @@ void four_block_right (){
   chassis.pid_odom_set({{{95.0_in, 49.75_in}, rev, 127},
                       {{99.25_in, 42.75_in}, fwd, 127}},
                       true);
-  // chassis.pid_wait_until(20_in);
-  chassis.pid_wait_quick_chain();
+  pros::delay(585);
+  AntennaRaise(true);
+  MatchLoadDrop(true);
+  pros::delay(775);
+  AntennaRaise(false);
 
   // //move to three centered blocks + 2 on the line
   // chassis.pid_odom_set({{{95.0_in, 49.75_in}, rev, 127},
@@ -1421,44 +1508,58 @@ void four_block_right (){
 
   //swing into goal
   chassis.pid_swing_set(ez::RIGHT_SWING, -9_deg, 127);
-  chassis.pid_wait_until(30_deg);
+  pros::delay(180);
   intakeTop.move(127);
-  chassis.pid_wait_quick_chain();
+  pros::delay(915);
   // pros::delay(5);
-  intakeTop.move(0);
-  intakeBottom.move(0);
   chassis.odom_xyt_set(120_in, 42_in, 0_deg);
+  MatchLoadDrop(false);
 
   //pull out of long goal
   chassis.pid_odom_set({{120_in, 37_in}, rev, 127}, true);
+  pros::delay(200);
+  intakeTop.move(0);
+  intakeBottom.move(0);
   chassis.pid_wait_quick_chain();
   
-  //turn away from wall
-  // chassis.pid_turn_set(268_deg, TURN_SPEED); //was-1 //was 0
-  // chassis.pid_wait();
-  chassis.pid_turn_set({108_in, 37_in}, fwd, 127, true);
-  chassis.pid_wait_quick_chain();
-
-  //move away from wall
-  chassis.pid_odom_set({{119.1_in, 37_in}, fwd, 127}, true);
-  chassis.pid_wait_quick_chain();
-
-  //turn so antenna is in goal
-  chassis.pid_turn_set({115.5_in, 58_in}, fwd, 127, true);
-  chassis.pid_wait_quick();
-  // chassis.pid_turn_set({108_in, 62_in}, rev, 127, true);
+  // //turn away from wall
+  // // chassis.pid_turn_set(268_deg, TURN_SPEED); //was-1 //was 0
+  // // chassis.pid_wait();
+  // chassis.pid_turn_set({108_in, 37_in}, fwd, 127, true);
   // chassis.pid_wait_quick_chain();
 
-  //push antenna to end of open area
-  chassis.pid_odom_set({{112.25_in, 63_in}, fwd, 100}, true);
-  chassis.pid_wait();
+  // //move away from wall
+  // chassis.pid_odom_set({{119.1_in, 37_in}, fwd, 127}, true);
+  // chassis.pid_wait_quick_chain();
 
-  // chassis.pid_odom_set({{{112_in, 34_in}, rev, 127},
-  //                     {{110_in, 38_in}, fwd, 127},
-  //                     {{110_in, 56_in}, fwd, 127}},
-  //                     true);
-  // // chassis.pid_wait_until(20_in);
+  // //turn so antenna is in goal
+  // chassis.pid_turn_set({115.5_in, 58_in}, fwd, 127, true);
+  // chassis.pid_wait_quick();
+  // // chassis.pid_turn_set({108_in, 62_in}, rev, 127, true);
+  // // chassis.pid_wait_quick_chain();
+
+  // //push antenna to end of open area
+  // chassis.pid_odom_set({{112.25_in, 63_in}, fwd, 100}, true);
   // chassis.pid_wait();
+
+  // // chassis.pid_odom_set({{{112_in, 34_in}, rev, 127},
+  // //                     {{110_in, 38_in}, fwd, 127},
+  // //                     {{110_in, 56_in}, fwd, 127}},
+  // //                     true);
+  // // // chassis.pid_wait_until(20_in);
+  // // chassis.pid_wait();
+  // chassis.pid_turn_set(-35_deg, TURN_SPEED);
+  // chassis.pid_wait();
+
+  //antenna push
+  chassis.pid_turn_set(-90_deg, TURN_SPEED); //was-1 //was 0
+  chassis.pid_wait_quick_chain();
+  chassis.pid_drive_set(4.95_in, 127);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_turn_set(0_deg, TURN_SPEED); //was-1 //was 0
+  chassis.pid_wait_quick_chain();
+  chassis.pid_drive_set(25_in, 85);
+  chassis.pid_wait_quick_chain();
   chassis.pid_turn_set(-35_deg, TURN_SPEED);
   chassis.pid_wait();
 
