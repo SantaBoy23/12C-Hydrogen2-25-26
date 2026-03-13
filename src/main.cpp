@@ -30,13 +30,16 @@ void initialize() {
 
   chassis.opcontrol_curve_buttons_toggle(true);   // Enables modifying the controller curve with buttons on the joysticks
   chassis.opcontrol_drive_activebrake_set(0.0);   // Sets the active brake kP. We recommend ~2.  0 will disable.
-  //chassis.opcontrol_curve_default_set(0.0, 0.0);  // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
+  chassis.opcontrol_curve_default_set(0.0);  // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
 
   default_constants();  // Set the drivetrain constants from autons.cpp
 
   // Autonomous Selector
   ez::as::auton_selector.autons_add({
-      // {"Sig SOLO AWP\n\n(4 + 3 + 4)", sig_solo_awp},
+      // {"Skills Auto", skills_auto},
+      
+      {"Sig SOLO AWP\n\n(4 + 3 + 4)", sig_solo_awp},
+      {"SAFE LEFT side counter auto (4 + 3 + Counter + Antenna)", SAFE_left_counter_auto},
       {"LEFT side counter auto (4 + 3 + Counter + Antenna)", left_counter_auto},
       {"Antenna push auto for RIGHT side\n\n(7 + antenna)", right_antenna_auto},
       {"4 block", four_block_right},

@@ -8,6 +8,7 @@ void OdomPodLift(bool OdomPodState);
 void OdomPodControl();
 
 void left_counter_auto();
+void SAFE_left_counter_auto();
 void push_solo_awp ();
 void push_alt_solo_awp ();
 void sig_solo_awp ();
