@@ -117,7 +117,7 @@ bool saveSkillsRecording(const char* filename) {
     return true;
 }
 
-//calls the values from the CSV file to play it back
+//calls the CSV file in the SD card
 bool loadSkillsRecording(const char* filename) {
     std::ifstream file(filename);
     if (!file.is_open()) return false;
@@ -168,8 +168,8 @@ void stopSkillsPlayback() {
     printf("Playback stopped\n");
 }
 
-//updates the values in the CSV file
-void updateSkillsPlayback() {
+//plays the values in the CSV file
+void playSkillsPlayback() {
     if (!playingBackSkills || recordedSkillsData.empty()) return;
     
     double elapsedTime = pros::millis() - playbackSkillsStartTime;
@@ -210,6 +210,7 @@ void initialize() {
 
   chassis.opcontrol_curve_buttons_toggle(true);
   chassis.opcontrol_drive_activebrake_set(0.0);
+  chassis.opcontrol_curve_default_set(0.0);
 
   default_constants();
 
@@ -297,7 +298,7 @@ void ez_template_extras() {
 void opcontrol() {
   // OdomPodLift(true);
   pros::delay(500);
-  chassis.drive_brake_set(MOTOR_BRAKE_BRAKE);
+  chassis.drive_brake_set(MOTOR_BRAKE_COAST);
 
   bool recordingMode = false;
   bool playbackMode = false;
@@ -352,7 +353,7 @@ void opcontrol() {
       }
     } 
     else {
-      updateSkillsPlayback();
+      playSkillsPlayback();
       
       if (master.get_digital_new_press(DIGITAL_DOWN)) {
         playbackMode = false;
