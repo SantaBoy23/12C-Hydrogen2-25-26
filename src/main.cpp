@@ -3,7 +3,7 @@
 ez::Drive chassis(
     {-18, -19, -20},    // Left Chassis Ports
     {11, 12, 13}, // Right Chassis Ports
-    2, 3.25, 450  // IMU Port, Wheel Diameter (in), Wheel RPM
+    1, 3.25, 450  // IMU Port, Wheel Diameter (in), Wheel RPM
 );
 
 // Uncomment the trackers you're using here!
@@ -40,11 +40,13 @@ void initialize() {
       
       {"Sig SOLO AWP\n\n(4 + 3 + 4)", sig_solo_awp},
       {"SAFE LEFT side counter auto (4 + 3 + Counter + Antenna)", SAFE_left_counter_auto},
-      {"LEFT side counter auto (4 + 3 + Counter + Antenna)", left_counter_auto},
       {"Antenna push auto for RIGHT side\n\n(7 + antenna)", right_antenna_auto},
       {"4 block", four_block_right},
-
+      {"LEFT side counter auto (4 + 3 + Counter + Antenna)", left_counter_auto},
       {"PUSH sig SOLO AWP \n\n(push + 5 + 3 + 3)", push_solo_awp},
+      {"Skills Auto", skills_auto},
+      {"2 Inch Auto", two_inch_auto},
+
 
       // {"PUSH sig SOLO AWP \n\n(push + 5 + 3 + 3)", push_solo_awp},
       {"Middle Goal Antenna Auto for LEFT Side\n\n(4 + 3 + antenna)", elims_left_auto},
@@ -52,7 +54,6 @@ void initialize() {
       {"4 block", four_block_right},
       {"LEFT side 9 block auto", nine_block_left},
       {"RIGHT side 9 block auto", nine_block_right},
-      {"Skills Auto", skills_auto},
 
       {"Sig SOLO AWP\n\n(4 + 3 + 4)", sig_solo_awp},
       {"PUSH sig SOLO AWP \n\n(push + 5 + 3 + 3)", push_solo_awp},

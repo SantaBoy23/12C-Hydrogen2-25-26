@@ -20,6 +20,7 @@ void skills_auto();
 void four_block_right();
 void nine_block_left();
 void nine_block_right();
+void two_inch_auto();
 
 void random_testing();
 void drive_example();
