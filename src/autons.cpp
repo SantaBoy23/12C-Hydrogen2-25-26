@@ -67,8 +67,8 @@ void left_counter_auto() {
   //move back towards match loader
   intakeTop.move(-127);
   intakeBottom.move(127);
-  chassis.pid_drive_set(29.15_in, 127);
-  pros::delay(1000);
+  chassis.pid_drive_set(29.0_in, 127);
+  pros::delay(1050);
   AntennaRaise(true);
   MatchLoadDrop(true);
 
@@ -78,11 +78,11 @@ void left_counter_auto() {
 
   //move into match loader and collect 3 blocks
   intakeBottom.move(100);
-  chassis.pid_odom_set({{24.0_in, 5.65_in}, rev, 100}, true); //was27,7
+  chassis.pid_odom_set({{24.25_in, 5.65_in}, rev, 100}, true); //was27,7
   pros::delay(1050);
 
   //move forward into long goal and empty blocks
-  chassis.pid_odom_set({{22.75_in, 36.0_in}, fwd, 127}, true);
+  chassis.pid_odom_set({{23.65_in, 36.0_in}, fwd, 127}, true);
   pros::delay(700);
   // chassis.pid_speed_max_set(50);
   intakeTop.move(127);
@@ -93,6 +93,8 @@ void left_counter_auto() {
   chassis.odom_xy_set(24_in, 43_in);
   AntennaRaise(false);
   MatchLoadDrop(false);
+  intakeTop.move(-127);
+  intakeBottom.move(127);
 
   //pull out of long goal and turn to face center goal
   chassis.pid_odom_set({{24_in, 24_in}, rev, 110}, true); //was27,7
@@ -102,7 +104,7 @@ void left_counter_auto() {
   chassis.pid_wait_quick_chain();
 
   //move to cluster of 3 blocks and pick them up
-  chassis.pid_odom_set({{49_in, 48.0_in}, rev, 127}, true);
+  chassis.pid_odom_set({{48.0_in, 48.25_in}, rev, 127}, true);
   pros::delay(750);
   MatchLoadDrop(true);
   chassis.pid_wait();
@@ -112,7 +114,7 @@ void left_counter_auto() {
   chassis.pid_wait_quick_chain();
 
   //move to center goal and deposit blocks
-  chassis.pid_odom_set({{57.0_in, 61.5_in}, fwd, 120}, true);
+  chassis.pid_odom_set({{54.5_in, 62.85_in}, fwd, 120}, true);
   chassis.pid_wait_until(21_in);
   CenterDrop(true);  
   intakeTop.move(-55);
@@ -131,7 +133,7 @@ void left_counter_auto() {
   MatchLoadDrop(false);
 
   //pull back towards long goal
-  chassis.pid_odom_set({{35_in, 37_in}, rev, 110}, true); //was27,7
+  chassis.pid_odom_set({{30.5_in, 37_in}, rev, 110}, true); //was27,7
   chassis.pid_wait();
   CenterDescoreRaise(false);
 
@@ -140,8 +142,8 @@ void left_counter_auto() {
   chassis.pid_wait_quick_chain();
 
   //push antenna into long goal
-  chassis.pid_odom_set({{38.25_in, 70_in}, rev, 110}, true); //was27,7
-  pros::delay(675);
+  chassis.pid_odom_set({{35.95_in, 70_in}, rev, 127}, true); //was27,7
+  pros::delay(650);
 
   //turn to lock in place
   chassis.pid_turn_set(210_deg, TURN_SPEED); //was-1 //was 0
@@ -169,10 +171,10 @@ void SAFE_left_counter_auto() {
   //move into match loader and collect 3 blocks
   intakeBottom.move(100);
   chassis.pid_odom_set({{24.25_in, 5.65_in}, rev, 100}, true); //was27,7
-  pros::delay(1050);
+  pros::delay(1100);
 
   //move forward into long goal and empty blocks
-  chassis.pid_odom_set({{23.65_in, 36.0_in}, fwd, 127}, true);
+  chassis.pid_odom_set({{23.5_in, 36.0_in}, fwd, 127}, true);
   pros::delay(700);
   // chassis.pid_speed_max_set(50);
   intakeTop.move(127);
@@ -183,6 +185,8 @@ void SAFE_left_counter_auto() {
   chassis.odom_xy_set(24_in, 43_in);
   AntennaRaise(false);
   MatchLoadDrop(false);
+  intakeTop.move(-127);
+  intakeBottom.move(127);
 
   //pull out of long goal and turn to face center goal
   chassis.pid_odom_set({{24_in, 24_in}, rev, 110}, true); //was27,7
@@ -192,7 +196,7 @@ void SAFE_left_counter_auto() {
   chassis.pid_wait_quick_chain();
 
   //move to cluster of 3 blocks and pick them up
-  chassis.pid_odom_set({{48.0_in, 48.25_in}, rev, 127}, true);
+  chassis.pid_odom_set({{48.5_in, 48.25_in}, rev, 127}, true);
   pros::delay(750);
   MatchLoadDrop(true);
   chassis.pid_wait();
@@ -202,7 +206,7 @@ void SAFE_left_counter_auto() {
   chassis.pid_wait_quick_chain();
 
   //move to center goal and deposit blocks
-  chassis.pid_odom_set({{54.25_in, 62.85_in}, fwd, 120}, true);
+  chassis.pid_odom_set({{55.75_in, 62.85_in}, fwd, 120}, true);
   chassis.pid_wait_until(21_in);
   CenterDrop(true);  
   intakeTop.move(-55);
@@ -210,7 +214,7 @@ void SAFE_left_counter_auto() {
   pros::delay(150);
   chassis.pid_drive_set(1.25_in, 127);
   intakeTop.move(-80);
-  pros::delay(950);
+  pros::delay(1050);
 
   //pull back, lift center descore, and push forwards
   chassis.pid_drive_set(-7.5_in, 127);
@@ -221,7 +225,7 @@ void SAFE_left_counter_auto() {
   MatchLoadDrop(false);
 
   //pull back towards long goal
-  chassis.pid_odom_set({{31_in, 37_in}, rev, 110}, true); //was27,7
+  chassis.pid_odom_set({{32.5_in, 37_in}, rev, 110}, true); //was27,7
   chassis.pid_wait();
   CenterDescoreRaise(false);
 
@@ -230,7 +234,7 @@ void SAFE_left_counter_auto() {
   chassis.pid_wait_quick_chain();
 
   //push antenna into long goal
-  chassis.pid_odom_set({{35.25_in, 71_in}, rev, 90}, true); //was27,7
+  chassis.pid_odom_set({{36.5_in, 71_in}, rev, 90}, true); //was27,7
   pros::delay(675);
 }
 
