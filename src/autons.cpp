@@ -65,45 +65,39 @@ void default_constants() {
 
 void generated_skills_auto() {
   //Set Starting Position
-  chassis.odom_xyt_set(0.25_in, -0.13_in, -5.99_deg);
+  chassis.odom_xyt_set(0.00_in, 0.00_in, 0.00_deg);
 
-  //Mechanism State Changed
   matchLoad.set(true); // Match Load
 
   //Move
-  chassis.pid_odom_set({{0.25_in, -15.41_in}, rev, 110}, false);
+  chassis.pid_odom_set({{0.00_in, -11.12_in}, rev, 110}, false);
   chassis.pid_wait_quick_chain();
 
   //Move
-  chassis.pid_odom_set({{0.25_in, -22.12_in}, rev, 110}, false);
+  chassis.pid_odom_set({{0.00_in, -21.99_in}, rev, 110}, false);
   chassis.pid_wait_quick_chain();
 
   //Mechanism State Changed
-  chassis.pid_odom_set({{0.25_in, -26.80_in}, rev, 110}, false);
+  chassis.pid_odom_set({{0.00_in, -26.83_in}, rev, 110}, false);
   chassis.pid_wait_quick_chain();
   intakeTop.move(-110); // Top Intake
   intakeBottom.move(200); // Bottom Intake
 
+  //Delay
+  pros::delay(800);
+
   //Mechanism State Changed
-  chassis.pid_odom_set({{0.25_in, -26.92_in}, rev, 110}, false);
+  chassis.pid_odom_set({{0.00_in, -26.83_in}, fwd, 110}, false);
   chassis.pid_wait_quick_chain();
   intakeTop.move(0); // Top Intake
   intakeBottom.move(0); // Bottom Intake
 
   //Move
-  chassis.pid_odom_set({{0.25_in, -14.25_in}, fwd, 110}, false);
-  chassis.pid_wait_quick_chain();
-
-  //Move
-  chassis.pid_odom_set({{0.25_in, -10.23_in}, fwd, 110}, false);
-  chassis.pid_wait_quick_chain();
-
-  //Move
-  chassis.pid_odom_set({{0.25_in, -2.36_in}, fwd, 110}, false);
+  chassis.pid_odom_set({{0.00_in, -10.10_in}, fwd, 110}, false);
   chassis.pid_wait_quick_chain();
 
   //Mechanism State Changed
-  chassis.pid_odom_set({{0.25_in, -0.62_in}, fwd, 110}, false);
+  chassis.pid_odom_set({{0.00_in, -0.49_in}, fwd, 110}, false);
   chassis.pid_wait_quick_chain();
   matchLoad.set(false); // Match Load
 
