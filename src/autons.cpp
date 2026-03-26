@@ -1,6 +1,7 @@
 #include "main.h"
 #include "autons.hpp"
 #include "wallDrive.hpp"
+#include "distanceIntegration.hpp"
 
 /////
 // For installation, upgrading, documentations, and tutorials, check out our website!
@@ -1143,7 +1144,7 @@ void skills_7_block_auto() {
 
   //drop odom pod and run snap test
   OdomPodLift(false);
-  wall_snap(88);
+  // wall_snap(88);
   pros::delay(50);
 
   //move away from wall to line up with long goal
@@ -1680,132 +1681,49 @@ void two_inch_auto(){
 
 
 void random_testing (){
-  //random wall ride tests
-  chassis.odom_xyt_set(10_in, 24_in, 0_deg);
-  // AntennaRaise(true);
-  // wall_drive_to_point_fwd_y_front(12, 72, 127, 24);
-  wall_check(10, 24);
-  print_odom();
-  // wall_drive_y(10, -96, 110);
+  //set starting angle
+  chassis.drive_angle_set(90_deg);
+  chassis.odom_xyt_set(90_in, 23_in, 90_deg);
 
-  // //Set starting angle
-  // chassis.odom_xyt_set(0_in, 0_in, 0_deg);
-  // // wall drive-09
-  // wall_drive_to_point(0, 110.0, 127);
+  //move towards match loader and start intake
+  intakeTop.move(-127);
+  intakeBottom.move(127);
+  chassis.pid_drive_set(29.15_in, 127);
+  pros::delay(950);
+  MatchLoadDrop(true);
 
-  // //Set starting angle
-  // chassis.odom_xyt_set(0_in, 0_in, 90_deg);
-  // // wall drive
-  // wall_drive_to_point(110, 0, 127);
-
-  // //turn
-  // turn_to_angle(95, 110);
-
-   // chassis.pid_swing_set(ez::RIGHT_SWING, 120, -110);
-  // chassis.pid_wait();
-
-  // chassis.pid_odom_set({{96_in, 96_in}, rev, 110}, true); //was90 speed //was80 speed //was150_deg
-  // chassis.pid_wait();
-
-
-  //jiggle the robot around while intaking
-  // chassis.pid_swing_set(ez::RIGHT_SWING, 15, 110);
-  // chassis.pid_wait();
-  // chassis.pid_swing_set(ez::LEFT_SWING, -15, 110);
-  // chassis.pid_wait();
-  // chassis.pid_swing_set(ez::LEFT_SWING, 0, 110);
-  // chassis.pid_wait();
-  // drive_set(127, 90);
-  // pros::delay(50);
-  // drive_set(90, 127);
-  // pros::delay(50);
-  // drive_set(127, 90);
-  // pros::delay(50);
-  // drive_set(90, 127);
-  // pros::delay(50);
-  // drive_set(0, 0);
-
-  // chassis.pid_turn_set(20_deg, 110);
+  //turn to face match loader
+  // chassis.pid_turn_set({113_in, 10_in}, rev, 127, true);
   // chassis.pid_wait_quick_chain();
-  // chassis.pid_turn_set(-20_deg, 110);
-  // chassis.pid_wait_quick_chain();
-  // chassis.pid_turn_set(20_deg, 110);
-  // chassis.pid_wait_quick_chain();
-  // chassis.pid_turn_set(-20_deg, 110);
-  // chassis.pid_wait_quick_chain();
-  // chassis.pid_turn_set(0_deg, 110);
-  // chassis.pid_wait_quick_chain();
+  chassis.pid_turn_set(-4_deg, TURN_SPEED); //was 0
+  chassis.pid_wait_quick_chain();
 
-  // //pull out of park zone
-  // chassis.pid_drive_set(20_in, 127); //was-4
-  // chassis.pid_wait();
+  // pros::delay(5);
 
-  //drop odom pod
+  //move into match loader and collect 3 blocks
+  chassis.pid_odom_set({{122.5_in, 9.25_in}, rev, 50}, true);
+  pros::delay(1075);
+  // weightSensorReadings(); 
+  pros::delay(100);
 
+  // move straight back into long goal and deposit blocks
+  chassis.pid_odom_set({{124.25_in, 39.0_in}, fwd, 120}, true);
+  pros::delay(700);
+  // chassis.pid_speed_max_set(50);
+  intakeTop.move(127);
+  intakeBottom.move(127);
+  pros::delay(100);
+  chassis.pid_drive_set(2.25_in, 110);
+  pros::delay(725);
+  chassis.odom_xy_set(124_in, 40.5_in);
+  // intakeTop.move(-127);
+  // intakeBottom.move(127);
 
-  // //turn so right faces the wall
-  // chassis.pid_turn_set(270_deg, 110);
-  // chassis.pid_wait();
-  // pros::delay(10);
-
-  // //run snap test
-  // wall_snap(72);
-  // print_odom();
-
-  // chassis.pid_turn_set(90_deg, 110);
-
-  // // go to 4 blocks
-  // chassis.pid_odom_set({{96_in, 96_in}, rev, 110}, true); //was90 speed //was80 speed //was150_deg
-  // chassis.pid_wait();
-
-  // //turn to face center goal
-  // chassis.pid_turn_set(235_deg, 110);
-  // chassis.pid_wait();
-
-  // //move to center goal and intake in all blocks
-  // chassis.pid_odom_set({{82_in, 82_in}, rev, 110}, true); //was90 speed //was80 speed //was150_deg
-  // chassis.pid_wait_until(4_in);
-  // CenterDrop(true);
-  // intakeTop.move(-110);
-  // chassis.pid_wait();
-  // pros::delay(1400);
-
-
-
-// void drive_set(int left, int right);
-
-
-  // ////////park zone push test
-  // //lift odom pod and start intake
-  // chassis.odom_xyt_set(87_in, 8_in, 90_deg);
-  // OdomPodLift(true);
-  // BottomIntakeMove(127);
-  // TopIntakeMove(-127);
-  // chassis.pid_drive_set(7_in, 127);
-  // chassis.pid_wait_quick_chain();
-
-
-  // //push into park zone
-  // chassis.pid_drive_set(-56_in, 127);
-  // chassis.pid_wait_quick_chain();
-  // chassis.pid_drive_set(-26_in, 90);
-  // chassis.pid_wait_quick_chain();
-  // chassis.pid_drive_set(-18_in, 50);
-  // chassis.pid_wait();
-
-  // //drop odom pod and wall snap
-  // OdomPodLift(false);
-  // // wall_snap(32);
-  // pros::delay(500);
-
-  // //pull away from loader
-  // chassis.pid_drive_set(3_in, 110);
-  // chassis.pid_wait();
-
-
-
-
-
+  //pull back from long goal
+  // intakeTop.move(-127);
+  MatchLoadDrop(false);
+  chassis.pid_odom_set({{124.0_in, 32_in}, rev, 127}, true);
+  chassis.pid_wait();
 }
 
 void drive_example() {
